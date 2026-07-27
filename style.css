@@ -28,10 +28,15 @@ body {
     background: var(--white);
     color: var(--black);
     line-height: 1.6;
+    overflow-x: hidden;
 }
 
 body.menu-open {
     overflow: hidden;
+}
+
+a {
+    color: inherit;
 }
 
 .page-overlay {
@@ -49,11 +54,6 @@ body.menu-open .page-overlay {
     opacity: 1;
     pointer-events: auto;
 }
-
-
-/* =========================
-   NAVIGATION
-========================= */
 
 .topbar {
     height: 82px;
@@ -172,23 +172,17 @@ body.menu-open .page-overlay {
     margin-bottom: 14px;
 }
 
-.dropdown-column a,
-.nested-dropdown-button {
+.dropdown-column a {
     color: white;
     text-decoration: none;
     font-family: inherit;
     font-size: 15px;
     font-weight: 700;
     padding: 7px 0;
-    background: none;
-    border: none;
-    text-align: left;
-    cursor: pointer;
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.dropdown-column a:hover,
-.nested-dropdown-button:hover {
+.dropdown-column a:hover {
     opacity: 0.72;
     transform: translateX(4px);
 }
@@ -216,11 +210,6 @@ body.menu-open .page-overlay {
     transform: translateY(-2px);
     background: var(--primary);
 }
-
-
-/* =========================
-   GLOBAL BUTTONS
-========================= */
 
 .primary-button,
 .secondary-button {
@@ -253,11 +242,6 @@ body.menu-open .page-overlay {
 .secondary-button:hover {
     transform: translateY(-3px);
 }
-
-
-/* =========================
-   HOMEPAGE
-========================= */
 
 .hero {
     min-height: 720px;
@@ -344,11 +328,16 @@ body.menu-open .page-overlay {
     padding: 36px;
     background: var(--light-gray);
     border-radius: 28px;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.stat-number,
-.division-number,
-.about-card-number {
+.stat-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+}
+
+.stat-number {
     display: block;
     margin-bottom: 28px;
     color: var(--primary);
@@ -385,10 +374,9 @@ body.menu-open .page-overlay {
     letter-spacing: -0.06em;
 }
 
-
-/* =========================
-   DOCUMENTATION PAGES
-========================= */
+.join-section .documentation-eyebrow {
+    color: var(--primary);
+}
 
 .documentation-page {
     max-width: 1240px;
@@ -511,11 +499,6 @@ body.menu-open .page-overlay {
     margin-bottom: 12px;
 }
 
-
-/* =========================
-   ABOUT PAGE
-========================= */
-
 .about-introduction,
 .divisions-introduction {
     display: grid;
@@ -563,6 +546,14 @@ body.menu-open .page-overlay {
     padding: 36px;
     background: var(--light-gray);
     border-radius: 28px;
+}
+
+.about-card-number {
+    display: block;
+    margin-bottom: 28px;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 800;
 }
 
 .about-card h2 {
@@ -615,11 +606,6 @@ body.menu-open .page-overlay {
     display: flex;
     gap: 14px;
 }
-
-
-/* =========================
-   FAQ
-========================= */
 
 .faq-container {
     max-width: 900px;
@@ -683,11 +669,6 @@ body.menu-open .page-overlay {
     margin-bottom: 14px;
 }
 
-
-/* =========================
-   DIVISIONS
-========================= */
-
 .division-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -720,7 +701,9 @@ body.menu-open .page-overlay {
 }
 
 .division-number {
-    margin: 0;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 800;
 }
 
 .division-accent {
@@ -747,11 +730,6 @@ body.menu-open .page-overlay {
     font-size: 14px;
     font-weight: 800;
 }
-
-
-/* =========================
-   RANKS
-========================= */
 
 .ranks-container,
 .rank-structure,
@@ -803,11 +781,6 @@ body.menu-open .page-overlay {
     font-weight: 800;
 }
 
-
-/* =========================
-   FOOTER
-========================= */
-
 footer {
     max-width: 1240px;
     margin: auto;
@@ -847,11 +820,6 @@ footer {
 footer p {
     font-size: 12px;
 }
-
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 1100px) {
 
