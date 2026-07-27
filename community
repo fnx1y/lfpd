@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Community | Los Francisco Police Department</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/logo.png">
+</head>
+
+<body>
+
+    <div id="navbar"></div>
+
+    <main class="page-content">
+
+        <section class="page-hero">
+            <div class="page-hero-content">
+                <span class="section-label">THE LFPD COMMUNITY</span>
+
+                <h1>Community</h1>
+
+                <p>
+                    The Los Francisco Police Department is built around the people
+                    who make the community what it is.
+                </p>
+            </div>
+        </section>
+
+        <section class="content-section">
+
+            <div class="section-heading">
+                <span class="section-label">MORE THAN A DEPARTMENT</span>
+
+                <h2>Built Together</h2>
+
+                <p>
+                    Whether you're joining the department, playing alongside us,
+                    or simply becoming part of the community, everyone has a role
+                    in making Los Francisco better.
+                </p>
+            </div>
+
+            <div class="community-grid">
+
+                <div class="community-card">
+                    <span class="community-card-number">01</span>
+
+                    <h3>Connect</h3>
+
+                    <p>
+                        Meet new people, communicate with the community, and take
+                        part in the wider LFPD experience.
+                    </p>
+                </div>
+
+                <div class="community-card">
+                    <span class="community-card-number">02</span>
+
+                    <h3>Participate</h3>
+
+                    <p>
+                        Get involved in department activities, training, and
+                        opportunities to make your time in Los Francisco count.
+                    </p>
+                </div>
+
+                <div class="community-card">
+                    <span class="community-card-number">03</span>
+
+                    <h3>Belong</h3>
+
+                    <p>
+                        Become part of a community where dedication, teamwork,
+                        and professionalism are valued.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="content-section community-feature">
+
+            <div class="community-feature-content">
+
+                <span class="section-label">YOUR ROLE MATTERS</span>
+
+                <h2>Everyone Has a Place</h2>
+
+                <p>
+                    The LFPD community is made up of people with different interests,
+                    backgrounds, and goals. You don't have to be a member of the
+                    department to be part of the community.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div id="footer"></div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
