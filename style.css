@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
 :root {
-    --primary: #6094F5;
-    --primary-dark: #4d7fe3;
+    --primary: #4f8df7;
+    --primary-dark: #3978e8;
+    --primary-light: #eaf2ff;
+
     --black: #111214;
     --dark: #18191c;
     --gray: #686b73;
-    --light-gray: #f4f5f7;
-    --border: #e7e7e7;
+    --light-gray: #f4f6f9;
+    --border: #e5e8ee;
     --white: #ffffff;
 }
 
@@ -25,6 +27,7 @@ body {
     font-family: 'Inter', sans-serif;
     background: var(--white);
     color: var(--black);
+    line-height: 1.6;
 }
 
 body.menu-open {
@@ -49,7 +52,7 @@ body.menu-open .page-overlay {
 
 
 /* =========================
-   HEADER
+   NAVIGATION
 ========================= */
 
 .topbar {
@@ -136,7 +139,7 @@ body.menu-open .page-overlay {
     display: flex;
     gap: 38px;
     background: var(--primary);
-    border-radius: 38px;
+    border-radius: 30px;
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
@@ -163,24 +166,30 @@ body.menu-open .page-overlay {
 }
 
 .dropdown-label {
-    color: rgba(255, 255, 255, 0.58);
-    font-size: 14px;
+    color: rgba(255, 255, 255, 0.62);
+    font-size: 13px;
     font-weight: 700;
     margin-bottom: 14px;
 }
 
-.dropdown-column a {
+.dropdown-column a,
+.nested-dropdown-button {
     color: white;
     text-decoration: none;
     font-family: inherit;
     font-size: 15px;
     font-weight: 700;
     padding: 7px 0;
+    background: none;
+    border: none;
+    text-align: left;
+    cursor: pointer;
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.dropdown-column a:hover {
-    opacity: 0.7;
+.dropdown-column a:hover,
+.nested-dropdown-button:hover {
+    opacity: 0.72;
     transform: translateX(4px);
 }
 
@@ -210,7 +219,7 @@ body.menu-open .page-overlay {
 
 
 /* =========================
-   GENERAL BUTTONS
+   GLOBAL BUTTONS
 ========================= */
 
 .primary-button,
@@ -264,7 +273,8 @@ body.menu-open .page-overlay {
     max-width: 650px;
 }
 
-.eyebrow {
+.eyebrow,
+.documentation-eyebrow {
     display: block;
     margin-bottom: 22px;
     color: var(--primary);
@@ -336,7 +346,9 @@ body.menu-open .page-overlay {
     border-radius: 28px;
 }
 
-.stat-number {
+.stat-number,
+.division-number,
+.about-card-number {
     display: block;
     margin-bottom: 28px;
     color: var(--primary);
@@ -381,21 +393,20 @@ body.menu-open .page-overlay {
 .documentation-page {
     max-width: 1240px;
     margin: auto;
-    padding: 0 42px;
 }
 
 .documentation-hero {
-    padding: 100px 0 90px;
+    padding: 100px 42px 80px;
     border-bottom: 1px solid var(--border);
 }
 
 .back-link {
     display: inline-block;
-    margin-bottom: 55px;
+    margin-bottom: 70px;
     color: var(--gray);
+    text-decoration: none;
     font-size: 14px;
     font-weight: 600;
-    text-decoration: none;
     transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -404,27 +415,17 @@ body.menu-open .page-overlay {
     transform: translateX(-4px);
 }
 
-.documentation-eyebrow {
-    display: block;
-    margin-bottom: 22px;
-    color: var(--primary);
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-}
-
 .documentation-hero h1 {
-    max-width: 900px;
-    font-size: clamp(60px, 9vw, 120px);
-    line-height: 0.88;
+    font-size: clamp(58px, 8vw, 112px);
+    line-height: 0.9;
     letter-spacing: -0.08em;
     font-weight: 900;
+    margin-bottom: 42px;
 }
 
 .documentation-meta {
     display: flex;
-    gap: 30px;
-    margin-top: 40px;
+    gap: 35px;
     color: var(--gray);
     font-size: 13px;
     font-weight: 600;
@@ -432,33 +433,33 @@ body.menu-open .page-overlay {
 
 .documentation-layout {
     display: grid;
-    grid-template-columns: 230px 1fr;
+    grid-template-columns: 250px 1fr;
     gap: 100px;
-    padding: 100px 0;
+    padding: 90px 42px 120px;
 }
 
 .documentation-sidebar {
     position: sticky;
-    top: 120px;
+    top: 125px;
     align-self: start;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 12px;
 }
 
 .documentation-sidebar span {
-    margin-bottom: 10px;
     color: var(--primary);
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.12em;
+    margin-bottom: 12px;
 }
 
 .documentation-sidebar a {
     color: var(--gray);
-    font-size: 13px;
-    font-weight: 600;
     text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
     transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -472,33 +473,26 @@ body.menu-open .page-overlay {
 }
 
 .documentation-content section {
-    margin-bottom: 90px;
-    scroll-margin-top: 120px;
-}
-
-.documentation-content section:last-child {
-    margin-bottom: 0;
+    scroll-margin-top: 130px;
+    margin-bottom: 80px;
 }
 
 .documentation-content h2 {
-    margin-bottom: 22px;
     font-size: 36px;
-    line-height: 1;
-    letter-spacing: -0.05em;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    margin-bottom: 22px;
 }
 
 .documentation-content p {
-    margin-bottom: 22px;
     color: var(--gray);
     font-size: 17px;
-    line-height: 1.8;
+    line-height: 1.85;
+    margin-bottom: 22px;
 }
 
-.documentation-content p:last-child {
-    margin-bottom: 0;
-}
-
-.documentation-content .lead {
+.documentation-content .lead,
+.lead {
     color: var(--black);
     font-size: 24px;
     line-height: 1.5;
@@ -506,15 +500,15 @@ body.menu-open .page-overlay {
 }
 
 .documentation-content ul {
-    margin-top: 28px;
-    padding-left: 24px;
+    padding-left: 22px;
+    margin-top: 25px;
 }
 
 .documentation-content li {
-    margin-bottom: 15px;
     color: var(--gray);
-    font-size: 17px;
-    line-height: 1.7;
+    font-size: 16px;
+    line-height: 1.8;
+    margin-bottom: 12px;
 }
 
 
@@ -522,29 +516,26 @@ body.menu-open .page-overlay {
    ABOUT PAGE
 ========================= */
 
-.about-introduction {
+.about-introduction,
+.divisions-introduction {
     display: grid;
-    grid-template-columns: 1fr 280px;
+    grid-template-columns: 1.4fr 0.6fr;
     gap: 100px;
-    padding: 100px 0;
-    border-bottom: 1px solid var(--border);
+    padding: 90px 42px;
 }
 
-.about-introduction-text {
-    max-width: 750px;
-}
-
-.about-introduction-text p {
-    margin-bottom: 24px;
+.about-introduction-text p,
+.divisions-introduction p {
     color: var(--gray);
-    font-size: 18px;
+    font-size: 17px;
     line-height: 1.8;
+    margin-bottom: 20px;
 }
 
-.about-introduction-text .lead {
+.about-introduction-text .lead,
+.divisions-introduction .lead {
     color: var(--black);
-    font-size: 28px;
-    line-height: 1.45;
+    font-size: 25px;
     font-weight: 600;
 }
 
@@ -552,11 +543,11 @@ body.menu-open .page-overlay {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 280px;
-    border-radius: 35px;
-    background: var(--light-gray);
+    min-height: 260px;
+    border-radius: 30px;
+    background: var(--primary-light);
     color: var(--primary);
-    font-size: 58px;
+    font-size: 70px;
     font-weight: 900;
     letter-spacing: -0.08em;
 }
@@ -565,29 +556,19 @@ body.menu-open .page-overlay {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    padding: 100px 0;
+    padding: 0 42px 110px;
 }
 
 .about-card {
     padding: 36px;
-    min-height: 330px;
-    border-radius: 28px;
     background: var(--light-gray);
-}
-
-.about-card-number {
-    display: block;
-    margin-bottom: 70px;
-    color: var(--primary);
-    font-size: 14px;
-    font-weight: 800;
+    border-radius: 28px;
 }
 
 .about-card h2 {
-    margin-bottom: 18px;
     font-size: 25px;
-    line-height: 1;
-    letter-spacing: -0.04em;
+    line-height: 1.1;
+    margin-bottom: 18px;
 }
 
 .about-card p {
@@ -596,41 +577,38 @@ body.menu-open .page-overlay {
 }
 
 .about-wide-section {
+    margin: 0 42px 110px;
+    padding: 80px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 100px;
-    padding: 100px 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
+    grid-template-columns: 1fr 0.8fr;
+    gap: 80px;
+    background: var(--black);
+    color: white;
+    border-radius: 38px;
 }
 
 .about-wide-section h2 {
-    font-size: clamp(38px, 5vw, 68px);
+    font-size: clamp(38px, 5vw, 65px);
     line-height: 0.95;
     letter-spacing: -0.06em;
 }
 
-.about-wide-section-text {
-    padding-top: 45px;
-}
-
 .about-wide-section-text p {
-    margin-bottom: 24px;
-    color: var(--gray);
-    font-size: 18px;
+    color: rgba(255, 255, 255, 0.65);
     line-height: 1.8;
+    margin-bottom: 22px;
 }
 
 .about-next-step {
-    padding: 100px 0;
+    padding: 0 42px 120px;
 }
 
 .about-next-step h2 {
     max-width: 700px;
-    margin-bottom: 35px;
-    font-size: clamp(40px, 6vw, 80px);
+    font-size: clamp(40px, 5vw, 70px);
     line-height: 0.95;
-    letter-spacing: -0.07em;
+    letter-spacing: -0.06em;
+    margin-bottom: 35px;
 }
 
 .about-next-step-buttons {
@@ -645,37 +623,39 @@ body.menu-open .page-overlay {
 
 .faq-container {
     max-width: 900px;
-    padding: 100px 0;
+    margin: auto;
+    padding: 90px 42px 120px;
 }
 
 .faq-introduction {
-    margin-bottom: 55px;
-}
-
-.faq-introduction .lead {
-    max-width: 750px;
-    color: var(--black);
-    font-size: 24px;
-    line-height: 1.5;
-    font-weight: 600;
+    margin-bottom: 50px;
 }
 
 .faq-list {
-    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .faq-item {
-    border-bottom: 1px solid var(--border);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    background: white;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-item[open] {
+    border-color: var(--primary);
+    box-shadow: 0 15px 40px rgba(79, 141, 247, 0.08);
 }
 
 .faq-item summary {
-    position: relative;
-    padding: 28px 50px 28px 0;
-    color: var(--black);
-    font-size: 19px;
-    font-weight: 700;
+    padding: 24px 28px;
     cursor: pointer;
     list-style: none;
+    font-size: 17px;
+    font-weight: 700;
 }
 
 .faq-item summary::-webkit-details-marker {
@@ -684,31 +664,23 @@ body.menu-open .page-overlay {
 
 .faq-item summary::after {
     content: '+';
-    position: absolute;
-    right: 0;
-    top: 25px;
+    float: right;
     color: var(--primary);
-    font-size: 26px;
-    font-weight: 400;
-    transition: transform 0.2s ease;
+    font-size: 22px;
 }
 
 .faq-item[open] summary::after {
-    transform: rotate(45deg);
+    content: '−';
 }
 
 .faq-answer {
-    padding: 0 50px 28px 0;
+    padding: 0 28px 24px;
 }
 
 .faq-answer p {
-    margin-bottom: 16px;
     color: var(--gray);
     line-height: 1.8;
-}
-
-.faq-answer p:last-child {
-    margin-bottom: 0;
+    margin-bottom: 14px;
 }
 
 
@@ -716,60 +688,39 @@ body.menu-open .page-overlay {
    DIVISIONS
 ========================= */
 
-.divisions-introduction {
-    max-width: 800px;
-    padding: 100px 0 60px;
-}
-
-.divisions-introduction p {
-    margin-bottom: 22px;
-    color: var(--gray);
-    font-size: 18px;
-    line-height: 1.8;
-}
-
-.divisions-introduction .lead {
-    color: var(--black);
-    font-size: 26px;
-    line-height: 1.5;
-    font-weight: 600;
-}
-
 .division-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    padding: 40px 0 110px;
+    padding: 0 42px 120px;
 }
 
 .division-card {
+    min-height: 360px;
+    padding: 36px;
     display: flex;
     flex-direction: column;
-    min-height: 390px;
-    padding: 36px;
+    justify-content: space-between;
     border-radius: 30px;
-    background: var(--light-gray);
-    color: var(--black);
     text-decoration: none;
-    transition: transform 0.25s ease, background 0.25s ease;
+    color: var(--black);
+    background: var(--light-gray);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .division-card:hover {
-    transform: translateY(-6px);
-    background: #e9ebef;
+    transform: translateY(-7px);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
 }
 
 .division-card-top {
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    margin-bottom: 75px;
+    align-items: center;
 }
 
 .division-number {
-    color: var(--primary);
-    font-size: 14px;
-    font-weight: 800;
+    margin: 0;
 }
 
 .division-accent {
@@ -779,23 +730,76 @@ body.menu-open .page-overlay {
 }
 
 .division-card h2 {
-    margin-bottom: 18px;
-    font-size: 32px;
+    font-size: 34px;
     line-height: 1;
     letter-spacing: -0.05em;
+    margin: 45px 0 18px;
 }
 
 .division-card p {
-    max-width: 500px;
     color: var(--gray);
     line-height: 1.7;
 }
 
 .division-link {
-    margin-top: auto;
-    padding-top: 30px;
+    margin-top: 30px;
     color: var(--primary);
     font-size: 14px;
+    font-weight: 800;
+}
+
+
+/* =========================
+   RANKS
+========================= */
+
+.ranks-container,
+.rank-structure,
+.ranks-content {
+    max-width: 1000px;
+    margin: auto;
+    padding: 90px 42px 120px;
+}
+
+.rank-card,
+.rank-item,
+.rank-group {
+    padding: 28px 32px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: white;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rank-card:hover,
+.rank-item:hover,
+.rank-group:hover {
+    transform: translateX(5px);
+    border-color: var(--primary);
+    box-shadow: 0 12px 30px rgba(79, 141, 247, 0.08);
+}
+
+.rank-card h2,
+.rank-item h2,
+.rank-group h2 {
+    font-size: 22px;
+    margin: 0;
+}
+
+.rank-card p,
+.rank-item p,
+.rank-group p {
+    color: var(--gray);
+    margin: 5px 0 0;
+}
+
+.rank-number {
+    color: var(--primary);
+    font-size: 13px;
     font-weight: 800;
 }
 
@@ -824,7 +828,6 @@ footer {
 .footer-brand img {
     width: 42px;
     height: 42px;
-    object-fit: contain;
 }
 
 .footer-brand div {
@@ -847,7 +850,7 @@ footer p {
 
 
 /* =========================
-   RESPONSIVE
+   MOBILE
 ========================= */
 
 @media (max-width: 1100px) {
@@ -868,42 +871,15 @@ footer p {
 
     .documentation-layout {
         grid-template-columns: 1fr;
-        gap: 50px;
+        gap: 40px;
     }
 
     .documentation-sidebar {
         position: static;
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
     }
 
-    .documentation-sidebar span {
-        grid-column: 1 / -1;
-    }
-
+    .about-introduction,
     .about-wide-section {
-        gap: 50px;
-    }
-
-}
-
-@media (max-width: 800px) {
-
-    .about-introduction {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-
-    .about-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .about-wide-section {
-        grid-template-columns: 1fr;
-    }
-
-    .division-grid {
         grid-template-columns: 1fr;
     }
 
@@ -937,7 +913,8 @@ footer p {
         font-size: 70px;
     }
 
-    .hero-buttons {
+    .hero-buttons,
+    .about-next-step-buttons {
         flex-direction: column;
     }
 
@@ -946,9 +923,12 @@ footer p {
         height: 260px;
     }
 
-    .stats-section {
+    .stats-section,
+    .about-grid,
+    .division-grid {
         grid-template-columns: 1fr;
-        padding: 0 24px 80px;
+        padding-left: 24px;
+        padding-right: 24px;
     }
 
     .join-section {
@@ -959,12 +939,8 @@ footer p {
         gap: 30px;
     }
 
-    .documentation-page {
-        padding: 0 24px;
-    }
-
     .documentation-hero {
-        padding: 70px 0;
+        padding: 70px 24px 60px;
     }
 
     .documentation-hero h1 {
@@ -976,43 +952,46 @@ footer p {
         gap: 8px;
     }
 
-    .documentation-layout {
-        padding: 70px 0;
+    .documentation-layout,
+    .faq-container,
+    .ranks-container,
+    .rank-structure,
+    .ranks-content {
+        padding-left: 24px;
+        padding-right: 24px;
     }
 
-    .documentation-sidebar {
-        display: flex;
+    .about-introduction {
+        padding-left: 24px;
+        padding-right: 24px;
     }
 
-    .documentation-content h2 {
-        font-size: 30px;
+    .about-wide-section {
+        margin-left: 20px;
+        margin-right: 20px;
+        padding: 45px 30px;
     }
 
-    .documentation-content .lead {
-        font-size: 21px;
+    .about-next-step {
+        padding-left: 24px;
+        padding-right: 24px;
     }
 
-    .about-introduction,
-    .about-grid,
-    .about-wide-section,
-    .about-next-step,
-    .faq-container {
-        padding: 70px 0;
+    .faq-item summary {
+        padding: 20px;
+        font-size: 15px;
     }
 
-    .about-introduction-text .lead,
-    .divisions-introduction .lead,
-    .faq-introduction .lead {
-        font-size: 21px;
+    .faq-answer {
+        padding: 0 20px 20px;
     }
 
-    .about-next-step-buttons {
+    .rank-card,
+    .rank-item,
+    .rank-group {
+        align-items: flex-start;
+        gap: 15px;
         flex-direction: column;
-        align-items: stretch;
-    }
-
-    .division-card {
-        min-height: 350px;
     }
 
     footer {
