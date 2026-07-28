@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Announcement Editor | LFPD</title>
 
@@ -12,7 +16,10 @@
     content="Los Francisco Police Department announcement editor."
 >
 
-<link rel="stylesheet" href="style.css">
+<link
+    rel="stylesheet"
+    href="style.css"
+>
 
 <style>
 
@@ -158,6 +165,123 @@
     border: 1px solid rgba(181,3,3,.4);
 }
 
+.published-list {
+    display: grid;
+    gap: 15px;
+}
+
+.published-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    background: rgba(255,255,255,.02);
+}
+
+.published-info {
+    min-width: 0;
+}
+
+.published-number {
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: .5;
+    font-weight: 700;
+}
+
+.published-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 5px;
+}
+
+.published-date {
+    font-size: 13px;
+    opacity: .5;
+    margin-top: 5px;
+}
+
+.published-actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.edit-button,
+.delete-button {
+    border: 0;
+    padding: 10px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.edit-button {
+    background: rgba(52,152,219,.15);
+    border: 1px solid rgba(52,152,219,.3);
+    color: inherit;
+}
+
+.delete-button {
+    background: rgba(181,3,3,.15);
+    border: 1px solid rgba(181,3,3,.3);
+    color: inherit;
+}
+
+.empty-published {
+    padding: 30px;
+    text-align: center;
+    border: 1px dashed rgba(255,255,255,.1);
+    border-radius: 10px;
+    opacity: .6;
+}
+
+.cancel-edit {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    display: none;
+}
+
+.editor-mode {
+    display: none;
+    margin-bottom: 20px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    background: rgba(52,152,219,.1);
+    border: 1px solid rgba(52,152,219,.25);
+}
+
+@media (max-width: 700px) {
+
+    .published-item {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .published-actions {
+        width: 100%;
+    }
+
+    .edit-button,
+    .delete-button {
+        flex: 1;
+    }
+
+    .editor-header h1 {
+        font-size: 36px;
+    }
+
+}
+
 </style>
 
 </head>
@@ -168,20 +292,28 @@
 
 <header class="topbar">
 
-    <a href="index.html" class="brand">
+    <a
+        href="index.html"
+        class="brand"
+    >
 
         <img
             src="assets/logo.png"
             alt="Los Francisco Police Department logo"
         >
 
-        <span>LFPD</span>
+        <span>
+            LFPD
+        </span>
 
     </a>
 
     <nav class="navigation">
 
-        <a href="index.html" class="nav-link">
+        <a
+            href="index.html"
+            class="nav-link"
+        >
             Home
         </a>
 
@@ -448,9 +580,8 @@
         </h1>
 
         <p>
-            Create and publish department announcements.
-            Each section you add will be published as
-            a separate announcement.
+            Create, edit, and delete department announcements.
+            Each announcement is published independently.
         </p>
 
     </section>
@@ -458,6 +589,13 @@
     <form id="announcement-form">
 
         <div class="editor-panel">
+
+            <div
+                id="editor-mode"
+                class="editor-mode"
+            >
+                Editing announcement
+            </div>
 
             <h2>
                 Announcement Information
@@ -500,8 +638,8 @@
             </h2>
 
             <p>
-                Each section below becomes its own announcement
-                on the Announcements page.
+                Each announcement below becomes its own
+                announcement on the Announcements page.
             </p>
 
             <div id="sections"></div>
@@ -526,6 +664,14 @@
                 Publish Announcements
             </button>
 
+            <button
+                type="button"
+                class="cancel-edit"
+                id="cancel-edit"
+            >
+                Cancel Editing
+            </button>
+
             <div
                 id="status"
                 class="editor-status"
@@ -534,6 +680,30 @@
         </div>
 
     </form>
+
+    <section class="editor-panel">
+
+        <h2>
+            Published Announcements
+        </h2>
+
+        <p>
+            Manage announcements currently published
+            on the LFPD website.
+        </p>
+
+        <div
+            id="published-list"
+            class="published-list"
+        >
+
+            <div class="empty-published">
+                Loading announcements...
+            </div>
+
+        </div>
+
+    </section>
 
 </main>
 
@@ -571,34 +741,62 @@
 <script>
 
 const sectionsContainer =
-    document.getElementById("sections");
+    document.getElementById(
+        "sections"
+    );
 
 const addSectionButton =
-    document.getElementById("add-section");
+    document.getElementById(
+        "add-section"
+    );
 
 const form =
-    document.getElementById("announcement-form");
+    document.getElementById(
+        "announcement-form"
+    );
 
 const status =
-    document.getElementById("status");
+    document.getElementById(
+        "status"
+    );
 
 const publishButton =
-    document.getElementById("publish-button");
+    document.getElementById(
+        "publish-button"
+    );
+
+const cancelEditButton =
+    document.getElementById(
+        "cancel-edit"
+    );
+
+const editorMode =
+    document.getElementById(
+        "editor-mode"
+    );
+
+const publishedList =
+    document.getElementById(
+        "published-list"
+    );
 
 let sectionCount = 0;
 
-function addSection() {
+let editingAnnouncementId = null;
+
+function addSection(
+    announcement = null
+) {
 
     sectionCount++;
 
     const section =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     section.className =
         "section-editor";
-
-    section.dataset.section =
-        sectionCount;
 
     section.innerHTML = `
 
@@ -663,8 +861,30 @@ function addSection() {
 
     `;
 
+    if (announcement) {
+
+        section.querySelector(
+            ".section-heading"
+        ).value =
+            announcement.title || "";
+
+        section.querySelector(
+            ".section-label"
+        ).value =
+            announcement.label ||
+            "ANNOUNCEMENT";
+
+        section.querySelector(
+            ".section-content"
+        ).value =
+            announcement.content || "";
+
+    }
+
     section
-        .querySelector(".remove-section")
+        .querySelector(
+            ".remove-section"
+        )
         .addEventListener(
             "click",
             () => {
@@ -690,7 +910,10 @@ function updateSectionNumbers() {
         );
 
     sections.forEach(
-        (section, index) => {
+        (
+            section,
+            index
+        ) => {
 
             const heading =
                 section.querySelector(
@@ -705,12 +928,361 @@ function updateSectionNumbers() {
 
 }
 
+function showStatus(
+    message,
+    type
+) {
+
+    status.className =
+        `editor-status ${type}`;
+
+    status.textContent =
+        message;
+
+}
+
+function resetEditor() {
+
+    editingAnnouncementId =
+        null;
+
+    form.reset();
+
+    sectionsContainer.innerHTML =
+        "";
+
+    sectionCount = 0;
+
+    addSection();
+
+    publishButton.textContent =
+        "Publish Announcements";
+
+    cancelEditButton.style.display =
+        "none";
+
+    editorMode.style.display =
+        "none";
+
+}
+
+async function loadPublishedAnnouncements() {
+
+    publishedList.innerHTML = `
+
+        <div class="empty-published">
+            Loading announcements...
+        </div>
+
+    `;
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/announcements",
+                {
+                    method: "GET",
+                    credentials: "include",
+                    cache: "no-store"
+                }
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Unable to load announcements."
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        const announcements =
+            Array.isArray(
+                data.announcements
+            )
+                ? data.announcements
+                : [];
+
+        if (
+            announcements.length === 0
+        ) {
+
+            publishedList.innerHTML = `
+
+                <div class="empty-published">
+                    No announcements have been published yet.
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+        publishedList.innerHTML = "";
+
+        announcements.forEach(
+            announcement => {
+
+                const item =
+                    document.createElement(
+                        "div"
+                    );
+
+                item.className =
+                    "published-item";
+
+                item.innerHTML = `
+
+                    <div class="published-info">
+
+                        <div class="published-number">
+                            #${escapeHtml(
+                                announcement.number ||
+                                "000"
+                            )}
+                        </div>
+
+                        <div class="published-title">
+                            ${escapeHtml(
+                                announcement.title ||
+                                "Untitled Announcement"
+                            )}
+                        </div>
+
+                        <div class="published-date">
+                            Published ${escapeHtml(
+                                formatDate(
+                                    announcement.publishedAt
+                                )
+                            )}
+                        </div>
+
+                    </div>
+
+                    <div class="published-actions">
+
+                        <button
+                            type="button"
+                            class="edit-button"
+                            data-id="${escapeHtml(
+                                announcement.id
+                            )}"
+                        >
+                            Edit
+                        </button>
+
+                        <button
+                            type="button"
+                            class="delete-button"
+                            data-id="${escapeHtml(
+                                announcement.id
+                            )}"
+                        >
+                            Delete
+                        </button>
+
+                    </div>
+
+                `;
+
+                item
+                    .querySelector(
+                        ".edit-button"
+                    )
+                    .addEventListener(
+                        "click",
+                        () =>
+                            startEditing(
+                                announcement
+                            )
+                    );
+
+                item
+                    .querySelector(
+                        ".delete-button"
+                    )
+                    .addEventListener(
+                        "click",
+                        () =>
+                            deleteAnnouncement(
+                                announcement
+                            )
+                    );
+
+                publishedList.appendChild(
+                    item
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        publishedList.innerHTML = `
+
+            <div class="empty-published">
+                Unable to load announcements.
+            </div>
+
+        `;
+
+    }
+
+}
+
+function startEditing(
+    announcement
+) {
+
+    editingAnnouncementId =
+        announcement.id;
+
+    form.reset();
+
+    sectionsContainer.innerHTML =
+        "";
+
+    sectionCount = 0;
+
+    document.getElementById(
+        "title"
+    ).value =
+        announcement.title || "";
+
+    document.getElementById(
+        "subtitle"
+    ).value =
+        announcement.subtitle || "";
+
+    addSection(
+        announcement
+    );
+
+    publishButton.textContent =
+        "Save Changes";
+
+    cancelEditButton.style.display =
+        "block";
+
+    editorMode.style.display =
+        "block";
+
+    editorMode.textContent =
+        `Editing announcement #${
+            announcement.number ||
+            "000"
+        }`;
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+async function deleteAnnouncement(
+    announcement
+) {
+
+    const confirmed =
+        window.confirm(
+            `Are you sure you want to delete "${announcement.title}"?\n\nThis cannot be undone.`
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/announcements",
+                {
+                    method: "DELETE",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    credentials: "include",
+
+                    body:
+                        JSON.stringify({
+                            id:
+                                announcement.id
+                        })
+                }
+            );
+
+        const data =
+            await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Unable to delete announcement."
+            );
+
+        }
+
+        if (
+            editingAnnouncementId ===
+            announcement.id
+        ) {
+
+            resetEditor();
+
+        }
+
+        showStatus(
+            "Announcement deleted successfully.",
+            "success"
+        );
+
+        await loadPublishedAnnouncements();
+
+    } catch (error) {
+
+        console.error(error);
+
+        showStatus(
+            error.message ||
+            "Unable to delete announcement.",
+            "error"
+        );
+
+    }
+
+}
+
 addSectionButton.addEventListener(
     "click",
-    addSection
+    () => addSection()
 );
 
-addSection();
+cancelEditButton.addEventListener(
+    "click",
+    () => {
+
+        resetEditor();
+
+        status.className =
+            "editor-status";
+
+        status.textContent =
+            "";
+
+    }
+);
 
 form.addEventListener(
     "submit",
@@ -741,11 +1313,10 @@ form.addEventListener(
 
         if (!title) {
 
-            status.className =
-                "editor-status error";
-
-            status.textContent =
-                "Please enter a main title.";
+            showStatus(
+                "Please enter a main title.",
+                "error"
+            );
 
             return;
 
@@ -755,11 +1326,10 @@ form.addEventListener(
             sectionElements.length === 0
         ) {
 
-            status.className =
-                "editor-status error";
-
-            status.textContent =
-                "Please add at least one announcement.";
+            showStatus(
+                "Please add at least one announcement.",
+                "error"
+            );
 
             return;
 
@@ -796,11 +1366,10 @@ form.addEventListener(
 
             if (!heading) {
 
-                status.className =
-                    "editor-status error";
-
-                status.textContent =
-                    "Every announcement needs a title.";
+                showStatus(
+                    "Every announcement needs a title.",
+                    "error"
+                );
 
                 return;
 
@@ -808,11 +1377,10 @@ form.addEventListener(
 
             if (!content.trim()) {
 
-                status.className =
-                    "editor-status error";
-
-                status.textContent =
-                    "Every announcement needs content.";
+                showStatus(
+                    "Every announcement needs content.",
+                    "error"
+                );
 
                 return;
 
@@ -829,87 +1397,227 @@ form.addEventListener(
         publishButton.disabled =
             true;
 
-        publishButton.textContent =
-            "Publishing...";
-
         try {
 
-            const response =
-                await fetch(
-                    "/api/announcements",
-                    {
-                        method: "POST",
+            if (editingAnnouncementId) {
 
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
+                if (
+                    sections.length !== 1
+                ) {
 
-                        credentials: "include",
+                    showStatus(
+                        "When editing an announcement, only one announcement can be edited at a time.",
+                        "error"
+                    );
 
-                        body:
-                            JSON.stringify({
-                                title,
-                                subtitle,
-                                sections
-                            })
-                    }
+                    return;
+
+                }
+
+                publishButton.textContent =
+                    "Saving...";
+
+                const announcement =
+                    sections[0];
+
+                const response =
+                    await fetch(
+                        "/api/announcements",
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            credentials: "include",
+
+                            body:
+                                JSON.stringify({
+                                    id:
+                                        editingAnnouncementId,
+
+                                    title:
+                                        announcement.heading,
+
+                                    subtitle,
+
+                                    label:
+                                        announcement.label,
+
+                                    content:
+                                        announcement.content
+                                })
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Unable to save changes."
+                    );
+
+                }
+
+                showStatus(
+                    "Announcement updated successfully.",
+                    "success"
                 );
 
-            const data =
-                await response.json();
+                resetEditor();
 
-            if (!response.ok) {
+            } else {
 
-                throw new Error(
-                    data.error ||
-                    "Unable to publish announcements."
+                publishButton.textContent =
+                    "Publishing...";
+
+                const response =
+                    await fetch(
+                        "/api/announcements",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            credentials: "include",
+
+                            body:
+                                JSON.stringify({
+                                    title,
+                                    subtitle,
+                                    sections
+                                })
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Unable to publish announcements."
+                    );
+
+                }
+
+                showStatus(
+                    `${data.announcements.length} announcement${
+                        data.announcements.length === 1
+                            ? ""
+                            : "s"
+                    } published successfully.`,
+                    "success"
                 );
+
+                resetEditor();
 
             }
 
-            status.className =
-                "editor-status success";
-
-            status.textContent =
-                `${data.announcements.length} announcement${
-                    data.announcements.length === 1
-                        ? ""
-                        : "s"
-                } published successfully.`;
-
-            form.reset();
-
-            sectionsContainer.innerHTML =
-                "";
-
-            sectionCount = 0;
-
-            addSection();
+            await loadPublishedAnnouncements();
 
         } catch (error) {
 
             console.error(error);
 
-            status.className =
-                "editor-status error";
-
-            status.textContent =
+            showStatus(
                 error.message ||
-                "An error occurred while publishing.";
+                "An error occurred.",
+                "error"
+            );
 
         } finally {
 
             publishButton.disabled =
                 false;
 
-            publishButton.textContent =
-                "Publish Announcements";
+            if (
+                editingAnnouncementId
+            ) {
+
+                publishButton.textContent =
+                    "Save Changes";
+
+            } else {
+
+                publishButton.textContent =
+                    "Publish Announcements";
+
+            }
 
         }
 
     }
 );
+
+function formatDate(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(value);
+
+    }
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+}
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+addSection();
+
+loadPublishedAnnouncements();
 
 </script>
 
