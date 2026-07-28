@@ -1,13 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Announcement Editor | LFPD</title>
 
@@ -16,10 +14,7 @@
     content="Los Francisco Police Department announcement editor."
 >
 
-<link
-    rel="stylesheet"
-    href="style.css"
->
+<link rel="stylesheet" href="style.css">
 
 <style>
 
@@ -67,6 +62,10 @@
     margin-bottom: 25px;
 }
 
+.editor-field:last-child {
+    margin-bottom: 0;
+}
+
 .editor-field label {
     display: block;
     margin-bottom: 8px;
@@ -87,58 +86,36 @@
 }
 
 .editor-field textarea {
-    min-height: 180px;
+    min-height: 280px;
     resize: vertical;
 }
 
-.section-editor {
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 12px;
-    padding: 25px;
-    margin-top: 20px;
-}
-
-.section-top {
+.editor-actions {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-top: 25px;
 }
 
-.section-top h3 {
-    margin: 0;
-}
-
-.remove-section {
-    border: 0;
-    background: #b50303;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.add-section {
-    width: 100%;
-    padding: 14px;
-    border: 1px dashed rgba(255,255,255,.2);
-    background: transparent;
-    color: inherit;
+.publish-button,
+.cancel-button {
+    flex: 1;
+    padding: 16px;
     border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
     cursor: pointer;
-    margin-top: 20px;
 }
 
 .publish-button {
-    width: 100%;
-    padding: 17px;
     border: 0;
-    border-radius: 8px;
     background: #b50303;
     color: white;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
+}
+
+.cancel-button {
+    border: 1px solid rgba(255,255,255,.12);
+    background: transparent;
+    color: inherit;
 }
 
 .publish-button:disabled {
@@ -165,12 +142,12 @@
     border: 1px solid rgba(181,3,3,.4);
 }
 
-.published-list {
+.announcement-manager {
     display: grid;
-    gap: 15px;
+    gap: 12px;
 }
 
-.published-item {
+.managed-announcement {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -181,93 +158,72 @@
     background: rgba(255,255,255,.02);
 }
 
-.published-info {
+.managed-info {
     min-width: 0;
 }
 
-.published-number {
-    font-size: 11px;
+.managed-number {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
     letter-spacing: 2px;
-    opacity: .5;
+    opacity: .45;
+    margin-bottom: 6px;
+}
+
+.managed-title {
+    display: block;
+    font-size: 17px;
     font-weight: 700;
+    margin-bottom: 5px;
 }
 
-.published-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin-top: 5px;
+.managed-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    opacity: .45;
 }
 
-.published-date {
-    font-size: 13px;
-    opacity: .5;
-    margin-top: 5px;
-}
-
-.published-actions {
+.managed-buttons {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-shrink: 0;
 }
 
 .edit-button,
 .delete-button {
     border: 0;
-    padding: 10px 16px;
-    border-radius: 7px;
+    border-radius: 6px;
+    padding: 9px 14px;
+    color: white;
     cursor: pointer;
     font-weight: 700;
 }
 
 .edit-button {
-    background: rgba(52,152,219,.15);
-    border: 1px solid rgba(52,152,219,.3);
-    color: inherit;
+    background: #3498db;
 }
 
 .delete-button {
-    background: rgba(181,3,3,.15);
-    border: 1px solid rgba(181,3,3,.3);
-    color: inherit;
+    background: #b50303;
 }
 
-.empty-published {
-    padding: 30px;
-    text-align: center;
-    border: 1px dashed rgba(255,255,255,.1);
+.no-announcements {
+    padding: 25px;
     border-radius: 10px;
+    border: 1px dashed rgba(255,255,255,.12);
     opacity: .6;
-}
-
-.cancel-edit {
-    width: 100%;
-    padding: 14px;
-    margin-top: 12px;
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 8px;
-    background: transparent;
-    color: inherit;
-    cursor: pointer;
-    display: none;
-}
-
-.editor-mode {
-    display: none;
-    margin-bottom: 20px;
-    padding: 12px 15px;
-    border-radius: 8px;
-    background: rgba(52,152,219,.1);
-    border: 1px solid rgba(52,152,219,.25);
 }
 
 @media (max-width: 700px) {
 
-    .published-item {
+    .managed-announcement {
+        align-items: flex-start;
         flex-direction: column;
-        align-items: stretch;
     }
 
-    .published-actions {
+    .managed-buttons {
         width: 100%;
     }
 
@@ -276,8 +232,8 @@
         flex: 1;
     }
 
-    .editor-header h1 {
-        font-size: 36px;
+    .editor-actions {
+        flex-direction: column;
     }
 
 }
@@ -292,28 +248,20 @@
 
 <header class="topbar">
 
-    <a
-        href="index.html"
-        class="brand"
-    >
+    <a href="index.html" class="brand">
 
         <img
             src="assets/logo.png"
             alt="Los Francisco Police Department logo"
         >
 
-        <span>
-            LFPD
-        </span>
+        <span>LFPD</span>
 
     </a>
 
     <nav class="navigation">
 
-        <a
-            href="index.html"
-            class="nav-link"
-        >
+        <a href="index.html" class="nav-link">
             Home
         </a>
 
@@ -338,10 +286,6 @@
 
                     <a href="rules.html">
                         Department Rules
-                    </a>
-
-                    <a href="articles.html">
-                        Articles
                     </a>
 
                     <a href="faq.html">
@@ -562,7 +506,7 @@
         rel="noopener noreferrer"
         class="join-button"
     >
-        Open Discord
+        Discord Server
     </a>
 
 </header>
@@ -580,108 +524,96 @@
         </h1>
 
         <p>
-            Create, edit, and delete department announcements.
-            Each announcement is published independently.
+            Create, edit, and remove department announcements.
+            Every announcement appears as its own bookmark
+            on the Department Announcements page.
         </p>
 
     </section>
 
-    <form id="announcement-form">
+    <div class="editor-panel">
 
-        <div class="editor-panel">
+        <h2 id="form-heading">
+            Create Announcement
+        </h2>
 
-            <div
-                id="editor-mode"
-                class="editor-mode"
-            >
-                Editing announcement
-            </div>
-
-            <h2>
-                Announcement Information
-            </h2>
+        <form id="announcement-form">
 
             <div class="editor-field">
 
                 <label for="title">
-                    Main Title
+                    Announcement Title
                 </label>
 
                 <input
                     id="title"
                     type="text"
                     placeholder="Department Announcement"
+                    required
                 >
 
             </div>
 
             <div class="editor-field">
 
-                <label for="subtitle">
-                    Subtitle
+                <label for="label">
+                    Label
                 </label>
 
                 <input
-                    id="subtitle"
+                    id="label"
                     type="text"
-                    placeholder="Optional announcement description"
+                    value="ANNOUNCEMENT"
+                    placeholder="ANNOUNCEMENT"
                 >
 
             </div>
 
-        </div>
+            <div class="editor-field">
 
-        <div class="editor-panel">
+                <label for="content">
+                    Announcement Content
+                </label>
 
-            <h2>
-                Announcements
-            </h2>
+                <textarea
+                    id="content"
+                    placeholder="Write the complete announcement here..."
+                    required
+                ></textarea>
 
-            <p>
-                Each announcement below becomes its own
-                announcement on the Announcements page.
-            </p>
+            </div>
 
-            <div id="sections"></div>
+            <div class="editor-actions">
 
-            <button
-                type="button"
-                class="add-section"
-                id="add-section"
-            >
-                + Add Announcement
-            </button>
+                <button
+                    type="submit"
+                    class="publish-button"
+                    id="save-button"
+                >
+                    Publish Announcement
+                </button>
 
-        </div>
+                <button
+                    type="button"
+                    class="cancel-button"
+                    id="cancel-button"
+                    style="display:none;"
+                >
+                    Cancel Editing
+                </button>
 
-        <div class="editor-panel">
-
-            <button
-                type="submit"
-                class="publish-button"
-                id="publish-button"
-            >
-                Publish Announcements
-            </button>
-
-            <button
-                type="button"
-                class="cancel-edit"
-                id="cancel-edit"
-            >
-                Cancel Editing
-            </button>
+            </div>
 
             <div
                 id="status"
                 class="editor-status"
             ></div>
 
-        </div>
+        </form>
 
-    </form>
+    </div>
 
-    <section class="editor-panel">
+    <div class="editor-panel">
 
         <h2>
             Published Announcements
@@ -689,21 +621,21 @@
 
         <p>
             Manage announcements currently published
-            on the LFPD website.
+            on the website.
         </p>
 
         <div
-            id="published-list"
-            class="published-list"
+            id="announcement-manager"
+            class="announcement-manager"
         >
 
-            <div class="empty-published">
+            <div class="no-announcements">
                 Loading announcements...
             </div>
 
         </div>
 
-    </section>
+    </div>
 
 </main>
 
@@ -740,19 +672,39 @@
 
 <script>
 
-const sectionsContainer =
-    document.getElementById(
-        "sections"
-    );
-
-const addSectionButton =
-    document.getElementById(
-        "add-section"
-    );
-
 const form =
     document.getElementById(
         "announcement-form"
+    );
+
+const titleInput =
+    document.getElementById(
+        "title"
+    );
+
+const labelInput =
+    document.getElementById(
+        "label"
+    );
+
+const contentInput =
+    document.getElementById(
+        "content"
+    );
+
+const saveButton =
+    document.getElementById(
+        "save-button"
+    );
+
+const cancelButton =
+    document.getElementById(
+        "cancel-button"
+    );
+
+const formHeading =
+    document.getElementById(
+        "form-heading"
     );
 
 const status =
@@ -760,175 +712,14 @@ const status =
         "status"
     );
 
-const publishButton =
+const manager =
     document.getElementById(
-        "publish-button"
+        "announcement-manager"
     );
 
-const cancelEditButton =
-    document.getElementById(
-        "cancel-edit"
-    );
+let editingId = null;
 
-const editorMode =
-    document.getElementById(
-        "editor-mode"
-    );
-
-const publishedList =
-    document.getElementById(
-        "published-list"
-    );
-
-let sectionCount = 0;
-
-let editingAnnouncementId = null;
-
-function addSection(
-    announcement = null
-) {
-
-    sectionCount++;
-
-    const section =
-        document.createElement(
-            "div"
-        );
-
-    section.className =
-        "section-editor";
-
-    section.innerHTML = `
-
-        <div class="section-top">
-
-            <h3>
-                Announcement ${sectionCount}
-            </h3>
-
-            <button
-                type="button"
-                class="remove-section"
-            >
-                Remove
-            </button>
-
-        </div>
-
-        <div class="editor-field">
-
-            <label>
-                Announcement Title
-            </label>
-
-            <input
-                type="text"
-                class="section-heading"
-                placeholder="Enter announcement title"
-                required
-            >
-
-        </div>
-
-        <div class="editor-field">
-
-            <label>
-                Label
-            </label>
-
-            <input
-                type="text"
-                class="section-label"
-                value="ANNOUNCEMENT"
-                placeholder="ANNOUNCEMENT"
-            >
-
-        </div>
-
-        <div class="editor-field">
-
-            <label>
-                Content
-            </label>
-
-            <textarea
-                class="section-content"
-                placeholder="Write the announcement here..."
-                required
-            ></textarea>
-
-        </div>
-
-    `;
-
-    if (announcement) {
-
-        section.querySelector(
-            ".section-heading"
-        ).value =
-            announcement.title || "";
-
-        section.querySelector(
-            ".section-label"
-        ).value =
-            announcement.label ||
-            "ANNOUNCEMENT";
-
-        section.querySelector(
-            ".section-content"
-        ).value =
-            announcement.content || "";
-
-    }
-
-    section
-        .querySelector(
-            ".remove-section"
-        )
-        .addEventListener(
-            "click",
-            () => {
-
-                section.remove();
-
-                updateSectionNumbers();
-
-            }
-        );
-
-    sectionsContainer.appendChild(
-        section
-    );
-
-}
-
-function updateSectionNumbers() {
-
-    const sections =
-        sectionsContainer.querySelectorAll(
-            ".section-editor"
-        );
-
-    sections.forEach(
-        (
-            section,
-            index
-        ) => {
-
-            const heading =
-                section.querySelector(
-                    ".section-top h3"
-                );
-
-            heading.textContent =
-                `Announcement ${index + 1}`;
-
-        }
-    );
-
-}
-
-function showStatus(
+function setStatus(
     message,
     type
 ) {
@@ -941,39 +732,38 @@ function showStatus(
 
 }
 
-function resetEditor() {
+function resetForm() {
 
-    editingAnnouncementId =
-        null;
+    editingId = null;
 
     form.reset();
 
-    sectionsContainer.innerHTML =
+    labelInput.value =
+        "ANNOUNCEMENT";
+
+    formHeading.textContent =
+        "Create Announcement";
+
+    saveButton.textContent =
+        "Publish Announcement";
+
+    cancelButton.style.display =
+        "none";
+
+    status.className =
+        "editor-status";
+
+    status.textContent =
         "";
-
-    sectionCount = 0;
-
-    addSection();
-
-    publishButton.textContent =
-        "Publish Announcements";
-
-    cancelEditButton.style.display =
-        "none";
-
-    editorMode.style.display =
-        "none";
 
 }
 
-async function loadPublishedAnnouncements() {
+async function loadAnnouncements() {
 
-    publishedList.innerHTML = `
-
-        <div class="empty-published">
+    manager.innerHTML = `
+        <div class="no-announcements">
             Loading announcements...
         </div>
-
     `;
 
     try {
@@ -982,50 +772,41 @@ async function loadPublishedAnnouncements() {
             await fetch(
                 "/api/announcements",
                 {
-                    method: "GET",
                     credentials: "include",
                     cache: "no-store"
                 }
             );
 
-        if (!response.ok) {
-
-            throw new Error(
-                "Unable to load announcements."
-            );
-
-        }
-
         const data =
             await response.json();
 
+        if (!response.ok) {
+            throw new Error(
+                data.error ||
+                "Unable to load announcements."
+            );
+        }
+
         const announcements =
-            Array.isArray(
-                data.announcements
-            )
+            Array.isArray(data.announcements)
                 ? data.announcements
                 : [];
 
-        if (
-            announcements.length === 0
-        ) {
+        if (!announcements.length) {
 
-            publishedList.innerHTML = `
-
-                <div class="empty-published">
+            manager.innerHTML = `
+                <div class="no-announcements">
                     No announcements have been published yet.
                 </div>
-
             `;
 
             return;
-
         }
 
-        publishedList.innerHTML = "";
+        manager.innerHTML = "";
 
         announcements.forEach(
-            announcement => {
+            (announcement, index) => {
 
                 const item =
                     document.createElement(
@@ -1033,44 +814,37 @@ async function loadPublishedAnnouncements() {
                     );
 
                 item.className =
-                    "published-item";
+                    "managed-announcement";
 
                 item.innerHTML = `
 
-                    <div class="published-info">
+                    <div class="managed-info">
 
-                        <div class="published-number">
-                            #${escapeHtml(
-                                announcement.number ||
-                                "000"
-                            )}
-                        </div>
+                        <span class="managed-number">
+                            ${String(index + 1).padStart(2, "0")}
+                        </span>
 
-                        <div class="published-title">
+                        <span class="managed-title">
                             ${escapeHtml(
                                 announcement.title ||
                                 "Untitled Announcement"
                             )}
-                        </div>
+                        </span>
 
-                        <div class="published-date">
-                            Published ${escapeHtml(
-                                formatDate(
-                                    announcement.publishedAt
-                                )
+                        <span class="managed-label">
+                            ${escapeHtml(
+                                announcement.label ||
+                                "ANNOUNCEMENT"
                             )}
-                        </div>
+                        </span>
 
                     </div>
 
-                    <div class="published-actions">
+                    <div class="managed-buttons">
 
                         <button
                             type="button"
                             class="edit-button"
-                            data-id="${escapeHtml(
-                                announcement.id
-                            )}"
                         >
                             Edit
                         </button>
@@ -1078,9 +852,6 @@ async function loadPublishedAnnouncements() {
                         <button
                             type="button"
                             class="delete-button"
-                            data-id="${escapeHtml(
-                                announcement.id
-                            )}"
                         >
                             Delete
                         </button>
@@ -1096,7 +867,7 @@ async function loadPublishedAnnouncements() {
                     .addEventListener(
                         "click",
                         () =>
-                            startEditing(
+                            editAnnouncement(
                                 announcement
                             )
                     );
@@ -1113,7 +884,7 @@ async function loadPublishedAnnouncements() {
                             )
                     );
 
-                publishedList.appendChild(
+                manager.appendChild(
                     item
                 );
 
@@ -1124,60 +895,47 @@ async function loadPublishedAnnouncements() {
 
         console.error(error);
 
-        publishedList.innerHTML = `
-
-            <div class="empty-published">
+        manager.innerHTML = `
+            <div class="no-announcements">
                 Unable to load announcements.
             </div>
-
         `;
 
     }
 
 }
 
-function startEditing(
+function editAnnouncement(
     announcement
 ) {
 
-    editingAnnouncementId =
+    editingId =
         announcement.id;
 
-    form.reset();
-
-    sectionsContainer.innerHTML =
-        "";
-
-    sectionCount = 0;
-
-    document.getElementById(
-        "title"
-    ).value =
+    titleInput.value =
         announcement.title || "";
 
-    document.getElementById(
-        "subtitle"
-    ).value =
-        announcement.subtitle || "";
+    labelInput.value =
+        announcement.label ||
+        "ANNOUNCEMENT";
 
-    addSection(
-        announcement
-    );
+    contentInput.value =
+        announcement.content || "";
 
-    publishButton.textContent =
+    formHeading.textContent =
+        "Edit Announcement";
+
+    saveButton.textContent =
         "Save Changes";
 
-    cancelEditButton.style.display =
+    cancelButton.style.display =
         "block";
 
-    editorMode.style.display =
-        "block";
+    status.className =
+        "editor-status";
 
-    editorMode.textContent =
-        `Editing announcement #${
-            announcement.number ||
-            "000"
-        }`;
+    status.textContent =
+        "";
 
     window.scrollTo({
         top: 0,
@@ -1192,7 +950,7 @@ async function deleteAnnouncement(
 
     const confirmed =
         window.confirm(
-            `Are you sure you want to delete "${announcement.title}"?\n\nThis cannot be undone.`
+            `Delete "${announcement.title}"?\n\nThis cannot be undone.`
         );
 
     if (!confirmed) {
@@ -1203,22 +961,12 @@ async function deleteAnnouncement(
 
         const response =
             await fetch(
-                "/api/announcements",
+                `/api/announcements?id=${encodeURIComponent(
+                    announcement.id
+                )}`,
                 {
                     method: "DELETE",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    credentials: "include",
-
-                    body:
-                        JSON.stringify({
-                            id:
-                                announcement.id
-                        })
+                    credentials: "include"
                 }
             );
 
@@ -1235,26 +983,24 @@ async function deleteAnnouncement(
         }
 
         if (
-            editingAnnouncementId ===
+            editingId ===
             announcement.id
         ) {
-
-            resetEditor();
-
+            resetForm();
         }
 
-        showStatus(
+        setStatus(
             "Announcement deleted successfully.",
             "success"
         );
 
-        await loadPublishedAnnouncements();
+        await loadAnnouncements();
 
     } catch (error) {
 
         console.error(error);
 
-        showStatus(
+        setStatus(
             error.message ||
             "Unable to delete announcement.",
             "error"
@@ -1264,24 +1010,9 @@ async function deleteAnnouncement(
 
 }
 
-addSectionButton.addEventListener(
+cancelButton.addEventListener(
     "click",
-    () => addSection()
-);
-
-cancelEditButton.addEventListener(
-    "click",
-    () => {
-
-        resetEditor();
-
-        status.className =
-            "editor-status";
-
-        status.textContent =
-            "";
-
-    }
+    resetForm
 );
 
 form.addEventListener(
@@ -1290,31 +1021,19 @@ form.addEventListener(
 
         event.preventDefault();
 
-        status.className =
-            "editor-status";
-
-        status.textContent =
-            "";
-
         const title =
-            document.getElementById(
-                "title"
-            ).value.trim();
+            titleInput.value.trim();
 
-        const subtitle =
-            document.getElementById(
-                "subtitle"
-            ).value.trim();
+        const label =
+            labelInput.value.trim();
 
-        const sectionElements =
-            sectionsContainer.querySelectorAll(
-                ".section-editor"
-            );
+        const content =
+            contentInput.value;
 
         if (!title) {
 
-            showStatus(
-                "Please enter a main title.",
+            setStatus(
+                "Please enter an announcement title.",
                 "error"
             );
 
@@ -1322,12 +1041,10 @@ form.addEventListener(
 
         }
 
-        if (
-            sectionElements.length === 0
-        ) {
+        if (!content.trim()) {
 
-            showStatus(
-                "Please add at least one announcement.",
+            setStatus(
+                "Please enter announcement content.",
                 "error"
             );
 
@@ -1335,201 +1052,75 @@ form.addEventListener(
 
         }
 
-        const sections = [];
-
-        for (
-            const element of sectionElements
-        ) {
-
-            const heading =
-                element
-                    .querySelector(
-                        ".section-heading"
-                    )
-                    .value
-                    .trim();
-
-            const label =
-                element
-                    .querySelector(
-                        ".section-label"
-                    )
-                    .value
-                    .trim();
-
-            const content =
-                element
-                    .querySelector(
-                        ".section-content"
-                    )
-                    .value;
-
-            if (!heading) {
-
-                showStatus(
-                    "Every announcement needs a title.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-            if (!content.trim()) {
-
-                showStatus(
-                    "Every announcement needs content.",
-                    "error"
-                );
-
-                return;
-
-            }
-
-            sections.push({
-                heading,
-                label,
-                content
-            });
-
-        }
-
-        publishButton.disabled =
+        saveButton.disabled =
             true;
+
+        saveButton.textContent =
+            editingId
+                ? "Saving..."
+                : "Publishing...";
 
         try {
 
-            if (editingAnnouncementId) {
+            const method =
+                editingId
+                    ? "PUT"
+                    : "POST";
 
-                if (
-                    sections.length !== 1
-                ) {
+            const body = {
+                title,
+                label,
+                content
+            };
 
-                    showStatus(
-                        "When editing an announcement, only one announcement can be edited at a time.",
-                        "error"
-                    );
+            if (editingId) {
+                body.id =
+                    editingId;
+            }
 
-                    return;
-
-                }
-
-                publishButton.textContent =
-                    "Saving...";
-
-                const announcement =
-                    sections[0];
-
-                const response =
-                    await fetch(
-                        "/api/announcements",
-                        {
-                            method: "PUT",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            credentials: "include",
-
-                            body:
-                                JSON.stringify({
-                                    id:
-                                        editingAnnouncementId,
-
-                                    title:
-                                        announcement.heading,
-
-                                    subtitle,
-
-                                    label:
-                                        announcement.label,
-
-                                    content:
-                                        announcement.content
-                                })
-                        }
-                    );
-
-                const data =
-                    await response.json();
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        data.error ||
-                        "Unable to save changes."
-                    );
-
-                }
-
-                showStatus(
-                    "Announcement updated successfully.",
-                    "success"
+            const response =
+                await fetch(
+                    "/api/announcements",
+                    {
+                        method,
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+                        credentials: "include",
+                        body:
+                            JSON.stringify(body)
+                    }
                 );
 
-                resetEditor();
+            const data =
+                await response.json();
 
-            } else {
+            if (!response.ok) {
 
-                publishButton.textContent =
-                    "Publishing...";
-
-                const response =
-                    await fetch(
-                        "/api/announcements",
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            credentials: "include",
-
-                            body:
-                                JSON.stringify({
-                                    title,
-                                    subtitle,
-                                    sections
-                                })
-                        }
-                    );
-
-                const data =
-                    await response.json();
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        data.error ||
-                        "Unable to publish announcements."
-                    );
-
-                }
-
-                showStatus(
-                    `${data.announcements.length} announcement${
-                        data.announcements.length === 1
-                            ? ""
-                            : "s"
-                    } published successfully.`,
-                    "success"
+                throw new Error(
+                    data.error ||
+                    "Unable to save announcement."
                 );
-
-                resetEditor();
 
             }
 
-            await loadPublishedAnnouncements();
+            setStatus(
+                editingId
+                    ? "Announcement updated successfully."
+                    : "Announcement published successfully.",
+                "success"
+            );
+
+            resetForm();
+
+            await loadAnnouncements();
 
         } catch (error) {
 
             console.error(error);
 
-            showStatus(
+            setStatus(
                 error.message ||
                 "An error occurred.",
                 "error"
@@ -1537,21 +1128,12 @@ form.addEventListener(
 
         } finally {
 
-            publishButton.disabled =
+            saveButton.disabled =
                 false;
 
-            if (
-                editingAnnouncementId
-            ) {
-
-                publishButton.textContent =
-                    "Save Changes";
-
-            } else {
-
-                publishButton.textContent =
-                    "Publish Announcements";
-
+            if (!editingId) {
+                saveButton.textContent =
+                    "Publish Announcement";
             }
 
         }
@@ -1559,67 +1141,21 @@ form.addEventListener(
     }
 );
 
-function formatDate(value) {
-
-    if (!value) {
-        return "";
-    }
-
-    const date =
-        new Date(value);
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return String(value);
-
-    }
-
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        }
-    );
-
-}
-
 function escapeHtml(value) {
 
     return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
-addSection();
-
-loadPublishedAnnouncements();
+loadAnnouncements();
 
 </script>
 
 </body>
 </html>
+```
