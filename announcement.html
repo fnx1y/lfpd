@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
 
-```
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Announcement | LFPD</title>
 
@@ -14,26 +17,32 @@
     content="Los Francisco Police Department announcement."
 >
 
-<link rel="stylesheet" href="style.css">
-```
+<link
+    rel="stylesheet"
+    href="style.css"
+>
 
 </head>
 
 <body>
 
-```
 <div class="page-overlay"></div>
 
 <header class="topbar">
 
-    <a href="index.html" class="brand">
+    <a
+        href="index.html"
+        class="brand"
+    >
 
         <img
             src="assets/logo.png"
             alt="Los Francisco Police Department logo"
         >
 
-        <span>LFPD</span>
+        <span>
+            LFPD
+        </span>
 
     </a>
 
@@ -134,17 +143,17 @@
                         Rank Structure
                     </a>
 
-                    <a href="mission.html">
-                        Mission & Values
-                    </a>
-
                 </div>
 
                 <div class="dropdown-column">
 
                     <span class="dropdown-label">
-                        Department Updates
+                        Our Purpose
                     </span>
+
+                    <a href="mission.html">
+                        Mission & Values
+                    </a>
 
                     <a href="announcements.html">
                         Announcements
@@ -348,390 +357,281 @@
 
 <script>
 
-    async function loadAnnouncement() {
+async function loadAnnouncement() {
 
-        const root =
-            document.getElementById("announcement-root");
+    const root =
+        document.getElementById(
+            "announcement-root"
+        );
 
-        const params =
-            new URLSearchParams(
-                window.location.search
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const id =
+        params.get("id");
+
+    if (!id) {
+
+        showError(
+            "No announcement was specified."
+        );
+
+        return;
+
+    }
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/announcements",
+                {
+                    method: "GET",
+                    credentials: "include",
+                    cache: "no-store"
+                }
             );
 
-        const id =
-            params.get("id");
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load announcements."
+            );
+        }
 
-        if (!id) {
+        const data =
+            await response.json();
+
+        const announcements =
+            Array.isArray(
+                data.announcements
+            )
+                ? data.announcements
+                : [];
+
+        const announcement =
+            announcements.find(
+                item =>
+                    String(item.id) ===
+                    String(id)
+            );
+
+        if (!announcement) {
 
             showError(
-                "No announcement was specified."
+                "That announcement could not be found."
             );
 
             return;
 
         }
 
-        try {
-
-            const response =
-                await fetch(
-                    "/api/announcements",
-                    {
-                        method: "GET",
-                        credentials: "include",
-                        cache: "no-store"
-                    }
-                );
-
-            if (!response.ok) {
-                throw new Error(
-                    "Unable to load announcements."
-                );
-            }
-
-            const data =
-                await response.json();
-
-            const announcements =
-                Array.isArray(data.announcements)
-                    ? data.announcements
-                    : [];
-
-            const announcement =
-                announcements.find(
-                    item =>
-                        String(item.id) === String(id)
-                );
-
-            if (!announcement) {
-
-                showError(
-                    "That announcement could not be found."
-                );
-
-                return;
-
-            }
-
-            document.title =
-                `${announcement.title || "Announcement"} | LFPD`;
-
-            renderAnnouncement(
-                announcement,
-                root
-            );
-
-        } catch (error) {
-
-            console.error(error);
-
-            showError(
-                "The announcement couldn't be loaded."
-            );
-
-        }
-
-    }
-
-    function renderAnnouncement(
-        announcement,
-        root
-    ) {
-
-        const sections =
-            Array.isArray(announcement.sections)
-                ? announcement.sections
-                : [];
-
-        const navigation =
-            sections
-                .map((section, index) => {
-
-                    const title =
-                        typeof section === "string"
-                            ? section
-                            : section.heading ||
-                              section.title ||
-                              "Section";
-
-                    return `
-
-                        <a href="#section-${index}">
-                            ${String(index + 1).padStart(2, "0")}
-                            — ${escapeHtml(title)}
-                        </a>
-
-                    `;
-
-                })
-                .join("");
-
-        let contentHtml = "";
-
-        if (sections.length) {
-
-            sections.forEach(
-                (section, index) => {
-
-                    let heading =
-                        "Section";
-
-                    let label =
-                        "SECTION";
-
-                    let content =
-                        "";
-
-                    if (
-                        typeof section ===
-                        "string"
-                    ) {
-
-                        heading =
-                            section;
-
-                    } else {
-
-                        heading =
-                            section.heading ||
-                            section.title ||
-                            "Section";
-
-                        label =
-                            section.label ||
-                            "SECTION";
-
-                        content =
-                            section.content ||
-                            "";
-
-                    }
-
-                    contentHtml += `
-
-                        <section
-                            id="section-${index}"
-                            class="announcement-content-section"
-                        >
-
-                            <span class="announcement-section-number">
-                                ${String(index + 1).padStart(2, "0")}
-                                — ${escapeHtml(label)}
-                            </span>
-
-                            <h2>
-                                ${escapeHtml(heading)}
-                            </h2>
-
-                            ${
-                                content
-                                    ? `
-                                        <div class="announcement-rich-content">
-                                            ${content}
-                                        </div>
-                                      `
-                                    : ""
-                            }
-
-                        </section>
-
-                    `;
-
-                }
-            );
-
-            if (announcement.content) {
-
-                contentHtml += `
-
-                    <section class="announcement-content-section">
-
-                        <span class="announcement-section-number">
-                            ${String(sections.length + 1).padStart(2, "0")}
-                            — CONTENT
-                        </span>
-
-                        <div class="announcement-rich-content">
-                            ${announcement.content}
-                        </div>
-
-                    </section>
-
-                `;
-
-            }
-
-        } else {
-
-            contentHtml = `
-
-                <section class="announcement-content-section">
-
-                    <div class="announcement-rich-content">
-                        ${announcement.content || ""}
-                    </div>
-
-                </section>
-
-            `;
-
-        }
-
-        root.innerHTML = `
-
-            <section class="announcement-hero">
-
-                <a
-                    href="announcements.html"
-                    class="back-link"
-                >
-                    ← All Announcements
-                </a>
-
-                <span class="documentation-eyebrow">
-                    LOS FRANCISCO POLICE DEPARTMENT
-                </span>
-
-                <h1>
-                    ${escapeHtml(
-                        announcement.title ||
-                        "Untitled Announcement"
-                    )}
-                </h1>
-
-                <div class="announcement-meta">
-
-                    <span>
-                        ${escapeHtml(
-                            formatDate(
-                                announcement.publishedAt
-                            )
-                        )}
-                    </span>
-
-                </div>
-
-                ${
-                    announcement.subtitle
-                        ? `
-                            <p class="announcement-subtitle">
-                                ${escapeHtml(
-                                    announcement.subtitle
-                                )}
-                            </p>
-                          `
-                        : ""
-                }
-
-            </section>
-
-            <div class="announcement-layout">
-
-                ${
-                    sections.length
-                        ? `
-                            <aside class="announcement-sidebar">
-
-                                <span>
-                                    ON THIS PAGE
-                                </span>
-
-                                <nav>
-                                    ${navigation}
-                                </nav>
-
-                            </aside>
-                          `
-                        : ""
-                }
-
-                <article class="announcement-article">
-
-                    ${contentHtml}
-
-                </article>
-
-            </div>
-
-        `;
-
-    }
-
-    function showError(message) {
-
-        const root =
-            document.getElementById(
-                "announcement-root"
-            );
-
-        root.innerHTML = `
-
-            <section class="announcement-error">
-
-                <span>
-                    ANNOUNCEMENT
-                </span>
-
-                <h1>
-                    Unable to load
-                </h1>
-
-                <p>
-                    ${escapeHtml(message)}
-                </p>
-
-                <a
-                    href="announcements.html"
-                    class="primary-button"
-                >
-                    Back to Announcements
-                </a>
-
-            </section>
-
-        `;
-
-    }
-
-    function formatDate(value) {
-
-        if (!value) {
-            return "";
-        }
-
-        const date =
-            new Date(value);
-
-        if (Number.isNaN(date.getTime())) {
-            return String(value);
-        }
-
-        return date.toLocaleDateString(
-            "en-US",
-            {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
-            }
+        document.title =
+            `${
+                announcement.title ||
+                "Announcement"
+            } | LFPD`;
+
+        renderAnnouncement(
+            announcement,
+            root
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showError(
+            "The announcement couldn't be loaded."
         );
 
     }
 
-    function escapeHtml(value) {
+}
 
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+function renderAnnouncement(
+    announcement,
+    root
+) {
 
+    root.innerHTML = `
+
+        <section class="announcement-hero">
+
+            <a
+                href="announcements.html"
+                class="back-link"
+            >
+                ← All Announcements
+            </a>
+
+            <span class="documentation-eyebrow">
+                LOS FRANCISCO POLICE DEPARTMENT
+            </span>
+
+            <h1>
+                ${escapeHtml(
+                    announcement.title ||
+                    "Untitled Announcement"
+                )}
+            </h1>
+
+            <div class="announcement-meta">
+
+                <span>
+                    ${escapeHtml(
+                        formatDate(
+                            announcement.publishedAt
+                        )
+                    )}
+                </span>
+
+            </div>
+
+            ${
+                announcement.subtitle
+                    ? `
+                        <p class="announcement-subtitle">
+                            ${escapeHtml(
+                                announcement.subtitle
+                            )}
+                        </p>
+                      `
+                    : ""
+            }
+
+        </section>
+
+        <div class="announcement-layout">
+
+            <article class="announcement-article">
+
+                <section
+                    class="announcement-content-section"
+                >
+
+                    <span
+                        class="announcement-section-number"
+                    >
+                        ${escapeHtml(
+                            announcement.label ||
+                            "ANNOUNCEMENT"
+                        )}
+                    </span>
+
+                    <div
+                        class="announcement-rich-content"
+                    >
+                        ${
+                            announcement.content ||
+                            ""
+                        }
+                    </div>
+
+                </section>
+
+            </article>
+
+        </div>
+
+    `;
+
+}
+
+function showError(message) {
+
+    const root =
+        document.getElementById(
+            "announcement-root"
+        );
+
+    root.innerHTML = `
+
+        <section class="announcement-error">
+
+            <span>
+                ANNOUNCEMENT
+            </span>
+
+            <h1>
+                Unable to load
+            </h1>
+
+            <p>
+                ${escapeHtml(message)}
+            </p>
+
+            <a
+                href="announcements.html"
+                class="primary-button"
+            >
+                Back to Announcements
+            </a>
+
+        </section>
+
+    `;
+
+}
+
+function formatDate(value) {
+
+    if (!value) {
+        return "";
     }
 
-    loadAnnouncement();
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return String(value);
+    }
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+}
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+loadAnnouncement();
 
 </script>
-```
 
 </body>
 </html>
