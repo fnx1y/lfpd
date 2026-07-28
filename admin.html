@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin — Los Francisco Police Department</title>
+
+    <link rel="icon" type="image/png" href="assets/logo.png">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .admin-page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 90px 40px 120px;
+        }
+
+        .admin-header {
+            margin-bottom: 55px;
+        }
+
+        .admin-eyebrow {
+            color: #6094f5;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .admin-header h1 {
+            font-size: clamp(55px, 8vw, 100px);
+            line-height: 0.9;
+            letter-spacing: -0.07em;
+            margin-bottom: 25px;
+        }
+
+        .admin-header p {
+            max-width: 700px;
+            color: #686b73;
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        .admin-warning {
+            margin-bottom: 35px;
+            padding: 22px 25px;
+            border: 1px solid rgba(96, 148, 245, 0.25);
+            background: rgba(96, 148, 245, 0.07);
+            border-radius: 18px;
+            color: #41444b;
+            line-height: 1.6;
+        }
+
+        .admin-warning strong {
+            color: #6094f5;
+        }
+
+        .editor {
+            border: 1px solid #e5e5e7;
+            border-radius: 28px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .editor-top {
+            padding: 30px;
+            border-bottom: 1px solid #e8e8ea;
+            background: #fafafa;
+        }
+
+        .editor-top h2 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .editor-top p {
+            color: #686b73;
+            font-size: 14px;
+        }
+
+        .form-area {
+            padding: 32px;
+        }
+
+        .field {
+            margin-bottom: 28px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            color: #25262a;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            border: 1px solid #dcdde1;
+            border-radius: 13px;
+            padding: 15px 16px;
+            font-family: inherit;
+            font-size: 15px;
+            color: #111214;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .field input:focus,
+        .field textarea:focus,
+        .field select:focus {
+            border-color: #6094f5;
+            box-shadow: 0 0 0 4px rgba(96, 148, 245, 0.12);
+        }
+
+        .field textarea {
+            min-height: 150px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            padding: 12px;
+            border: 1px solid #dcdde1;
+            border-bottom: none;
+            border-radius: 13px 13px 0 0;
+            background: #f7f7f8;
+        }
+
+        .editor-toolbar button {
+            min-width: 38px;
+            height: 36px;
+            padding: 0 11px;
+            border: 1px solid #dedfe2;
+            border-radius: 8px;
+            background: #fff;
+            color: #24262a;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+
+        .editor-toolbar button:hover {
+            background: #eef3ff;
+            transform: translateY(-1px);
+        }
+
+        .editor-content {
+            min-height: 320px;
+            padding: 22px;
+            border: 1px solid #dcdde1;
+            border-radius: 0 0 13px 13px;
+            outline: none;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .editor-content:focus {
+            border-color: #6094f5;
+            box-shadow: 0 0 0 4px rgba(96, 148, 245, 0.12);
+        }
+
+        .editor-content:empty::before {
+            content: "Write your announcement here...";
+            color: #9b9da3;
+        }
+
+        .section-builder {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e8e8ea;
+        }
+
+        .section-builder h3 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .section-builder > p {
+            color: #686b73;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .sections {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .section-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .section-row input {
+            width: 100%;
+            border: 1px solid #dcdde1;
+            border-radius: 11px;
+            padding: 13px 14px;
+            font-family: inherit;
+            outline: none;
+        }
+
+        .section-row input:focus {
+            border-color: #6094f5;
+        }
+
+        .remove-section {
+            border: none;
+            background: #f1f1f2;
+            border-radius: 10px;
+            height: 43px;
+            padding: 0 14px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .remove-section:hover {
+            background: #e7e7e9;
+        }
+
+        .add-section {
+            margin-top: 15px;
+            border: 1px dashed #bfc1c6;
+            background: transparent;
+            border-radius: 11px;
+            padding: 12px 17px;
+            font-family: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .add-section:hover {
+            border-color: #6094f5;
+            color: #6094f5;
+        }
+
+        .admin-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #e8e8ea;
+        }
+
+        .preview-button,
+        .publish-button {
+            border: none;
+            border-radius: 999px;
+            padding: 15px 24px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .preview-button {
+            background: #f0f1f3;
+            color: #18191c;
+        }
+
+        .publish-button {
+            background: #6094f5;
+            color: #fff;
+        }
+
+        .preview-button:hover,
+        .publish-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .publish-button:hover {
+            background: #4d7fe3;
+        }
+
+        .preview {
+            display: none;
+            margin-top: 45px;
+            padding: 45px;
+            border-radius: 28px;
+            background: #fafafa;
+            border: 1px solid #e5e5e7;
+        }
+
+        .preview.visible {
+            display: block;
+        }
+
+        .preview-label {
+            color: #6094f5;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .preview h2 {
+            font-size: clamp(42px, 6vw, 75px);
+            line-height: 0.95;
+            letter-spacing: -0.06em;
+            margin-bottom: 22px;
+        }
+
+        .preview-meta {
+            color: #686b73;
+            margin-bottom: 35px;
+        }
+
+        .preview-body {
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        .preview-body blockquote {
+            margin: 25px 0;
+            padding: 18px 22px;
+            border-left: 4px solid #6094f5;
+            background: #f0f4ff;
+            color: #555860;
+        }
+
+        .preview-sections {
+            margin: 30px 0;
+            padding: 25px;
+            border-radius: 18px;
+            background: #fff;
+            border: 1px solid #e6e6e8;
+        }
+
+        .preview-sections strong {
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .preview-sections a {
+            display: block;
+            color: #6094f5;
+            text-decoration: none;
+            margin: 8px 0;
+            font-weight: 600;
+        }
+
+        @media (max-width: 700px) {
+            .admin-page {
+                padding: 60px 22px 90px;
+            }
+
+            .form-area {
+                padding: 22px;
+            }
+
+            .section-row {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .preview {
+                padding: 28px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-overlay"></div>
+
+    <header class="topbar">
+        <a href="index.html" class="brand">
+            <img src="assets/logo.png" alt="Los Francisco Police Department">
+            <span>LFPD</span>
+        </a>
+
+        <nav class="navigation">
+
+            <a href="index.html" class="nav-link">Home</a>
+
+            <div class="nav-dropdown">
+                <button class="nav-button">
+                    Documentation <span class="arrow">⌄</span>
+                </button>
+
+                <div class="dropdown-menu">
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">Resources</span>
+                        <a href="guidelines.html">Guidelines</a>
+                        <a href="rules.html">Rules</a>
+                        <a href="articles.html">Articles</a>
+                        <a href="faq.html">Frequently Asked Questions</a>
+                    </div>
+
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">Information</span>
+                        <a href="about.html">About LFPD</a>
+                        <a href="divisions.html">Divisions</a>
+                        <a href="ranks.html">Rank Structure</a>
+                        <a href="mission.html">Mission &amp; Values</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-dropdown">
+                <button class="nav-button">
+                    Department <span class="arrow">⌄</span>
+                </button>
+
+                <div class="dropdown-menu">
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">The Department</span>
+                        <a href="about.html">About LFPD</a>
+                        <a href="divisions.html">Divisions</a>
+                        <a href="ranks.html">Rank Structure</a>
+                        <a href="articles.html">Articles</a>
+                    </div>
+
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">Our Purpose</span>
+                        <a href="mission.html">Mission &amp; Values</a>
+                        <a href="announcements.html">Announcements</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-dropdown">
+                <button class="nav-button">
+                    Important Links <span class="arrow">⌄</span>
+                </button>
+
+                <div class="dropdown-menu">
+
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">Discord Links</span>
+
+                        <button class="nested-dropdown-button" onclick="toggleNested(this)">
+                            Discord Links <span>→</span>
+                        </button>
+
+                        <div class="nested-menu">
+                            <a href="https://discord.gg/qhBhaSvwgH" target="_blank">Main Server</a>
+                            <a href="https://discord.gg/phwgVf6zWU" target="_blank">Operations Server</a>
+                        </div>
+                    </div>
+
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">Roblox Links</span>
+
+                        <button class="nested-dropdown-button" onclick="toggleNested(this)">
+                            Roblox Links <span>→</span>
+                        </button>
+
+                        <div class="nested-menu">
+                            <a href="https://www.roblox.com/share/g/419607558" target="_blank">Academy Protection Unit</a>
+                            <a href="https://www.roblox.com/share/g/823126022" target="_blank">Traffic Unit</a>
+                            <a href="https://www.roblox.com/share/g/905023785" target="_blank">Training &amp; Education Unit</a>
+                            <a href="https://www.roblox.com/share/g/1059108908" target="_blank">SWAT</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="nav-dropdown">
+                <button class="nav-button">
+                    Join LFPD <span class="arrow">⌄</span>
+                </button>
+
+                <div class="dropdown-menu single-menu">
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">Start Your Career</span>
+                        <a href="why-join.html">Why Join LFPD?</a>
+                        <a href="recruitment.html">Recruitment</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-dropdown">
+                <button class="nav-button">
+                    Community <span class="arrow">⌄</span>
+                </button>
+
+                <div class="dropdown-menu single-menu">
+                    <div class="dropdown-column">
+                        <span class="dropdown-label">Stay Connected</span>
+                        <a href="community.html">Community</a>
+                        <a href="announcements.html">Announcements</a>
+                    </div>
+                </div>
+            </div>
+
+        </nav>
+
+        <a href="recruitment.html" class="join-button">
+            Join LFPD
+        </a>
+    </header>
+
+    <main class="admin-page">
+
+        <section class="admin-header">
+
+            <div class="admin-eyebrow">
+                Los Francisco Police Department
+            </div>
+
+            <h1>Announcement<br>Editor.</h1>
+
+            <p>
+                Create and publish official LFPD announcements from one place.
+                Build the page, arrange its sections, preview it, and publish it
+                when everything looks right.
+            </p>
+
+        </section>
+
+        <div class="admin-warning">
+            <strong>Administrator area.</strong>
+            This page is intended for authorized LFPD administration only.
+            Publishing access should remain restricted to your account.
+        </div>
+
+        <section class="editor">
+
+            <div class="editor-top">
+                <h2>Create an announcement</h2>
+                <p>
+                    Fill out the information below and use the editor to format
+                    the announcement.
+                </p>
+            </div>
+
+            <div class="form-area">
+
+                <div class="field">
+                    <label for="announcement-number">Announcement Number</label>
+                    <input
+                        type="text"
+                        id="announcement-number"
+                        placeholder="e.g. 04"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="announcement-title">Title</label>
+                    <input
+                        type="text"
+                        id="announcement-title"
+                        placeholder="Announcement title"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="announcement-subtitle">Subtitle</label>
+                    <input
+                        type="text"
+                        id="announcement-subtitle"
+                        placeholder="A short description or introduction"
+                    >
+                </div>
+
+                <div class="field">
+                    <label for="announcement-date">Date</label>
+                    <input
+                        type="date"
+                        id="announcement-date"
+                    >
+                </div>
+
+                <div class="field">
+
+                    <label>Announcement Content</label>
+
+                    <div class="editor-toolbar">
+
+                        <button type="button" onclick="formatText('bold')" title="Bold">
+                            B
+                        </button>
+
+                        <button type="button" onclick="formatText('italic')" title="Italic">
+                            I
+                        </button>
+
+                        <button type="button" onclick="formatText('underline')" title="Underline">
+                            U
+                        </button>
+
+                        <button type="button" onclick="formatText('formatBlock', 'h2')" title="Heading">
+                            H
+                        </button>
+
+                        <button type="button" onclick="formatText('formatBlock', 'blockquote')" title="Quote">
+                            “
+                        </button>
+
+                        <button type="button" onclick="formatText('insertUnorderedList')" title="Bullet List">
+                            •
+                        </button>
+
+                        <button type="button" onclick="formatText('insertOrderedList')" title="Numbered List">
+                            1.
+                        </button>
+
+                        <button type="button" onclick="addLink()" title="Link">
+                            Link
+                        </button>
+
+                        <button type="button" onclick="addImage()" title="Image">
+                            Image
+                        </button>
+
+                        <button type="button" onclick="changeTextColor()" title="Text Color">
+                            Color
+                        </button>
+
+                    </div>
+
+                    <div
+                        class="editor-content"
+                        id="announcement-content"
+                        contenteditable="true"
+                    ></div>
+
+                </div>
+
+                <section class="section-builder">
+
+                    <h3>On This Page</h3>
+
+                    <p>
+                        Add sections to automatically build the navigation shown
+                        beside the announcement.
+                    </p>
+
+                    <div class="sections" id="sections"></div>
+
+                    <button
+                        type="button"
+                        class="add-section"
+                        onclick="addSection()"
+                    >
+                        + Add Section
+                    </button>
+
+                </section>
+
+                <div class="admin-actions">
+
+                    <button
+                        type="button"
+                        class="preview-button"
+                        onclick="previewAnnouncement()"
+                    >
+                        Preview
+                    </button>
+
+                    <button
+                        type="button"
+                        class="publish-button"
+                        onclick="publishAnnouncement()"
+                    >
+                        Publish Announcement
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="preview" id="preview">
+
+            <div class="preview-label" id="preview-number">
+                00 — INTRODUCTION
+            </div>
+
+            <h2 id="preview-title">
+                Announcement Title
+            </h2>
+
+            <div class="preview-meta" id="preview-meta">
+                Los Francisco Police Department
+            </div>
+
+            <div class="preview-sections" id="preview-sections"></div>
+
+            <div
+                class="preview-body"
+                id="preview-body"
+            ></div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <div class="footer-brand">
+            <img src="assets/logo.png" alt="LFPD">
+
+            <div>
+                <strong>Los Francisco Police Department</strong>
+                <span>To Protect and To Serve.</span>
+            </div>
+        </div>
+
+        <p>
+            © 2026 Los Francisco Police Department
+        </p>
+
+    </footer>
+
+    <script>
+
+        const dropdowns = document.querySelectorAll(".nav-dropdown");
+
+        dropdowns.forEach(dropdown => {
+
+            const button = dropdown.querySelector(".nav-button");
+
+            if (!button) return;
+
+            button.addEventListener("click", event => {
+
+                event.stopPropagation();
+
+                dropdowns.forEach(other => {
+
+                    if (other !== dropdown) {
+                        other.classList.remove("active");
+                    }
+
+                });
+
+                dropdown.classList.toggle("active");
+
+                const hasOpenMenu =
+                    document.querySelector(".nav-dropdown.active");
+
+                document.body.classList.toggle(
+                    "menu-open",
+                    Boolean(hasOpenMenu)
+                );
+
+            });
+
+        });
+
+        document.addEventListener("click", event => {
+
+            if (!event.target.closest(".nav-dropdown")) {
+
+                dropdowns.forEach(dropdown => {
+                    dropdown.classList.remove("active");
+                });
+
+                document.body.classList.remove("menu-open");
+
+            }
+
+        });
+
+        function toggleNested(button) {
+
+            const menu = button.nextElementSibling;
+
+            if (!menu) return;
+
+            menu.classList.toggle("active");
+
+        }
+
+        function formatText(command, value = null) {
+
+            document.execCommand(
+                command,
+                false,
+                value
+            );
+
+            document
+                .getElementById("announcement-content")
+                .focus();
+
+        }
+
+        function addLink() {
+
+            const url = prompt("Enter the URL:");
+
+            if (!url) return;
+
+            document.execCommand(
+                "createLink",
+                false,
+                url
+            );
+
+        }
+
+        function addImage() {
+
+            const url = prompt("Enter the image URL:");
+
+            if (!url) return;
+
+            document.execCommand(
+                "insertImage",
+                false,
+                url
+            );
+
+        }
+
+        function changeTextColor() {
+
+            const color = prompt(
+                "Enter a color, such as #6094F5 or red:"
+            );
+
+            if (!color) return;
+
+            document.execCommand(
+                "foreColor",
+                false,
+                color
+            );
+
+        }
+
+        function addSection() {
+
+            const container =
+                document.getElementById("sections");
+
+            const row =
+                document.createElement("div");
+
+            row.className = "section-row";
+
+            row.innerHTML = `
+                <input
+                    type="text"
+                    class="section-number"
+                    placeholder="Section number"
+                >
+
+                <input
+                    type="text"
+                    class="section-title"
+                    placeholder="Section title"
+                >
+
+                <button
+                    type="button"
+                    class="remove-section"
+                    onclick="this.parentElement.remove()"
+                >
+                    Remove
+                </button>
+            `;
+
+            container.appendChild(row);
+
+            updateSectionNumbers();
+
+        }
+
+        function updateSectionNumbers() {
+
+            const rows =
+                document.querySelectorAll(".section-row");
+
+            rows.forEach((row, index) => {
+
+                const input =
+                    row.querySelector(".section-number");
+
+                if (!input.value) {
+                    input.value =
+                        String(index + 1).padStart(2, "0");
+                }
+
+            });
+
+        }
+
+        function getSections() {
+
+            const rows =
+                document.querySelectorAll(".section-row");
+
+            return Array.from(rows)
+                .map(row => {
+
+                    return {
+                        number:
+                            row.querySelector(".section-number").value.trim(),
+
+                        title:
+                            row.querySelector(".section-title").value.trim()
+
+                    };
+
+                })
+                .filter(section => section.title);
+
+        }
+
+        function previewAnnouncement() {
+
+            const number =
+                document.getElementById(
+                    "announcement-number"
+                ).value.trim() || "00";
+
+            const title =
+                document.getElementById(
+                    "announcement-title"
+                ).value.trim() || "Announcement Title";
+
+            const date =
+                document.getElementById(
+                    "announcement-date"
+                ).value;
+
+            const content =
+                document.getElementById(
+                    "announcement-content"
+                ).innerHTML;
+
+            document.getElementById(
+                "preview-number"
+            ).textContent =
+                `${number} — INTRODUCTION`;
+
+            document.getElementById(
+                "preview-title"
+            ).textContent = title;
+
+            document.getElementById(
+                "preview-meta"
+            ).textContent =
+                date
+                    ? `Los Francisco Police Department • ${date}`
+                    : "Los Francisco Police Department";
+
+            document.getElementById(
+                "preview-body"
+            ).innerHTML = content;
+
+            const sections =
+                getSections();
+
+            const sectionContainer =
+                document.getElementById(
+                    "preview-sections"
+                );
+
+            if (!sections.length) {
+
+                sectionContainer.innerHTML =
+                    "<strong>On This Page</strong><span>No sections added.</span>";
+
+            } else {
+
+                sectionContainer.innerHTML =
+                    "<strong>On This Page</strong>" +
+                    sections
+                        .map(section => `
+                            <a href="#">
+                                ${section.number} — ${section.title}
+                            </a>
+                        `)
+                        .join("");
+
+            }
+
+            const preview =
+                document.getElementById("preview");
+
+            preview.classList.add("visible");
+
+            preview.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        }
+
+        function publishAnnouncement() {
+
+            const number =
+                document.getElementById(
+                    "announcement-number"
+                ).value.trim();
+
+            const title =
+                document.getElementById(
+                    "announcement-title"
+                ).value.trim();
+
+            const subtitle =
+                document.getElementById(
+                    "announcement-subtitle"
+                ).value.trim();
+
+            const date =
+                document.getElementById(
+                    "announcement-date"
+                ).value;
+
+            const content =
+                document.getElementById(
+                    "announcement-content"
+                ).innerHTML;
+
+            const sections =
+                getSections();
+
+            if (!title) {
+
+                alert(
+                    "Please enter an announcement title."
+                );
+
+                return;
+
+            }
+
+            if (!content.trim()) {
+
+                alert(
+                    "Please enter announcement content."
+                );
+
+                return;
+
+            }
+
+            const announcement = {
+
+                id:
+                    Date.now(),
+
+                number:
+                    number || "00",
+
+                title,
+
+                subtitle,
+
+                date,
+
+                content,
+
+                sections,
+
+                createdAt:
+                    new Date().toISOString()
+
+            };
+
+            const existing =
+                JSON.parse(
+                    localStorage.getItem(
+                        "lfpdAnnouncements"
+                    ) || "[]"
+                );
+
+            existing.unshift(
+                announcement
+            );
+
+            localStorage.setItem(
+                "lfpdAnnouncements",
+                JSON.stringify(existing)
+            );
+
+            alert(
+                "Announcement published successfully."
+            );
+
+            window.location.href =
+                "announcements.html";
+
+        }
+
+    </script>
+
+</body>
+</html>
