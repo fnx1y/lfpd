@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,7 +42,8 @@
 
 .editor-header p {
     opacity: .7;
-    max-width: 700px;
+    max-width: 750px;
+    line-height: 1.7;
 }
 
 .editor-panel {
@@ -56,6 +56,12 @@
 
 .editor-panel h2 {
     margin-top: 0;
+}
+
+.editor-panel-description {
+    opacity: .65;
+    line-height: 1.7;
+    margin-bottom: 25px;
 }
 
 .editor-field {
@@ -88,6 +94,81 @@
 .editor-field textarea {
     min-height: 280px;
     resize: vertical;
+    line-height: 1.6;
+}
+
+.sections-container {
+    display: grid;
+    gap: 20px;
+}
+
+.section-editor {
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 14px;
+    padding: 25px;
+    background: rgba(255,255,255,.025);
+}
+
+.section-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.section-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 32px;
+    padding: 0 8px;
+    border-radius: 6px;
+    background: rgba(181,3,3,.15);
+    border: 1px solid rgba(181,3,3,.3);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.section-top h3 {
+    margin: 0;
+    font-size: 19px;
+}
+
+.remove-section {
+    border: 0;
+    background: #b50303;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.add-section {
+    width: 100%;
+    padding: 16px;
+    border: 1px dashed rgba(255,255,255,.2);
+    background: transparent;
+    color: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-weight: 700;
+    transition: .2s ease;
+}
+
+.add-section:hover {
+    background: rgba(255,255,255,.04);
+    border-color: rgba(255,255,255,.35);
 }
 
 .editor-actions {
@@ -128,6 +209,7 @@
     padding: 15px;
     border-radius: 8px;
     display: none;
+    line-height: 1.5;
 }
 
 .editor-status.success {
@@ -175,13 +257,20 @@
     display: block;
     font-size: 17px;
     font-weight: 700;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
-.managed-label {
+.managed-subtitle {
     display: block;
-    font-size: 10px;
-    letter-spacing: 1.5px;
+    font-size: 13px;
+    opacity: .55;
+    margin-bottom: 8px;
+}
+
+.managed-sections {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 1px;
     opacity: .45;
 }
 
@@ -218,6 +307,14 @@
 
 @media (max-width: 700px) {
 
+    .editor-page {
+        padding: 70px 20px;
+    }
+
+    .editor-header h1 {
+        font-size: 38px;
+    }
+
     .managed-announcement {
         align-items: flex-start;
         flex-direction: column;
@@ -234,6 +331,15 @@
 
     .editor-actions {
         flex-direction: column;
+    }
+
+    .section-top {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .remove-section {
+        width: 100%;
     }
 
 }
@@ -525,8 +631,9 @@
 
         <p>
             Create, edit, and remove department announcements.
-            Every announcement appears as its own bookmark
-            on the Department Announcements page.
+            Each announcement can contain multiple sections.
+            Those sections become the bookmark navigation on
+            the published announcement page.
         </p>
 
     </section>
@@ -536,6 +643,12 @@
         <h2 id="form-heading">
             Create Announcement
         </h2>
+
+        <p class="editor-panel-description">
+            Start by entering the information for the overall
+            announcement. Then add the sections that will appear
+            as bookmarks on the left side of the published page.
+        </p>
 
         <form id="announcement-form">
 
@@ -556,30 +669,42 @@
 
             <div class="editor-field">
 
-                <label for="label">
-                    Label
+                <label for="subtitle">
+                    Announcement Subtitle
                 </label>
 
                 <input
-                    id="label"
+                    id="subtitle"
                     type="text"
-                    value="ANNOUNCEMENT"
-                    placeholder="ANNOUNCEMENT"
+                    placeholder="Optional announcement description"
                 >
 
             </div>
 
-            <div class="editor-field">
+            <div class="editor-panel" style="margin: 30px 0 0; padding: 25px;">
 
-                <label for="content">
-                    Announcement Content
-                </label>
+                <h2>
+                    Sections
+                </h2>
 
-                <textarea
-                    id="content"
-                    placeholder="Write the complete announcement here..."
-                    required
-                ></textarea>
+                <p class="editor-panel-description">
+                    Each section becomes a bookmark in the
+                    "ON THIS PAGE" navigation. Add as many
+                    sections as you need.
+                </p>
+
+                <div
+                    id="sections-container"
+                    class="sections-container"
+                ></div>
+
+                <button
+                    type="button"
+                    class="add-section"
+                    id="add-section"
+                >
+                    + Add Section
+                </button>
 
             </div>
 
@@ -619,9 +744,10 @@
             Published Announcements
         </h2>
 
-        <p>
-            Manage announcements currently published
-            on the website.
+        <p class="editor-panel-description">
+            Manage announcements currently published on
+            the website. Editing an announcement edits its
+            entire page and all of its sections.
         </p>
 
         <div
@@ -682,14 +808,19 @@ const titleInput =
         "title"
     );
 
-const labelInput =
+const subtitleInput =
     document.getElementById(
-        "label"
+        "subtitle"
     );
 
-const contentInput =
+const sectionsContainer =
     document.getElementById(
-        "content"
+        "sections-container"
+    );
+
+const addSectionButton =
+    document.getElementById(
+        "add-section"
     );
 
 const saveButton =
@@ -718,6 +849,7 @@ const manager =
     );
 
 let editingId = null;
+let sectionCounter = 0;
 
 function setStatus(
     message,
@@ -732,14 +864,181 @@ function setStatus(
 
 }
 
+function addSection(
+    sectionData = null
+) {
+
+    sectionCounter++;
+
+    const section =
+        document.createElement(
+            "div"
+        );
+
+    section.className =
+        "section-editor";
+
+    section.dataset.section =
+        sectionCounter;
+
+    const heading =
+        sectionData?.heading || "";
+
+    const label =
+        sectionData?.label ||
+        "ANNOUNCEMENT";
+
+    const content =
+        sectionData?.content || "";
+
+    section.innerHTML = `
+
+        <div class="section-top">
+
+            <div class="section-heading">
+
+                <span class="section-number">
+                    01
+                </span>
+
+                <h3>
+                    Section 1
+                </h3>
+
+            </div>
+
+            <button
+                type="button"
+                class="remove-section"
+            >
+                Remove Section
+            </button>
+
+        </div>
+
+        <div class="editor-field">
+
+            <label>
+                Section Title
+            </label>
+
+            <input
+                type="text"
+                class="section-title"
+                placeholder="Example: New Patrol Procedures"
+                value="${escapeAttribute(heading)}"
+                required
+            >
+
+        </div>
+
+        <div class="editor-field">
+
+            <label>
+                Section Label
+            </label>
+
+            <input
+                type="text"
+                class="section-label"
+                value="${escapeAttribute(label)}"
+                placeholder="ANNOUNCEMENT"
+            >
+
+        </div>
+
+        <div class="editor-field">
+
+            <label>
+                Section Content
+            </label>
+
+            <textarea
+                class="section-content"
+                placeholder="Write the content for this section..."
+                required
+            >${escapeHtml(content)}</textarea>
+
+        </div>
+
+    `;
+
+    section
+        .querySelector(
+            ".remove-section"
+        )
+        .addEventListener(
+            "click",
+            () => {
+
+                section.remove();
+
+                updateSectionNumbers();
+
+            }
+        );
+
+    sectionsContainer.appendChild(
+        section
+    );
+
+    updateSectionNumbers();
+
+}
+
+function updateSectionNumbers() {
+
+    const sections =
+        sectionsContainer.querySelectorAll(
+            ".section-editor"
+        );
+
+    sections.forEach(
+        (section, index) => {
+
+            const number =
+                section.querySelector(
+                    ".section-number"
+                );
+
+            const heading =
+                section.querySelector(
+                    ".section-heading h3"
+                );
+
+            const formatted =
+                String(index + 1)
+                    .padStart(2, "0");
+
+            number.textContent =
+                formatted;
+
+            heading.textContent =
+                `Section ${index + 1}`;
+
+        }
+    );
+
+}
+
+function clearSections() {
+
+    sectionsContainer.innerHTML =
+        "";
+
+    sectionCounter = 0;
+
+}
+
 function resetForm() {
 
     editingId = null;
 
     form.reset();
 
-    labelInput.value =
-        "ANNOUNCEMENT";
+    clearSections();
+
+    addSection();
 
     formHeading.textContent =
         "Create Announcement";
@@ -772,6 +1071,7 @@ async function loadAnnouncements() {
             await fetch(
                 "/api/announcements",
                 {
+                    method: "GET",
                     credentials: "include",
                     cache: "no-store"
                 }
@@ -781,10 +1081,12 @@ async function loadAnnouncements() {
             await response.json();
 
         if (!response.ok) {
+
             throw new Error(
                 data.error ||
                 "Unable to load announcements."
             );
+
         }
 
         const announcements =
@@ -801,9 +1103,11 @@ async function loadAnnouncements() {
             `;
 
             return;
+
         }
 
-        manager.innerHTML = "";
+        manager.innerHTML =
+            "";
 
         announcements.forEach(
             (announcement, index) => {
@@ -815,6 +1119,13 @@ async function loadAnnouncements() {
 
                 item.className =
                     "managed-announcement";
+
+                const sections =
+                    Array.isArray(
+                        announcement.sections
+                    )
+                        ? announcement.sections
+                        : [];
 
                 item.innerHTML = `
 
@@ -831,11 +1142,21 @@ async function loadAnnouncements() {
                             )}
                         </span>
 
-                        <span class="managed-label">
-                            ${escapeHtml(
-                                announcement.label ||
-                                "ANNOUNCEMENT"
-                            )}
+                        ${
+                            announcement.subtitle
+                                ? `
+                                    <span class="managed-subtitle">
+                                        ${escapeHtml(
+                                            announcement.subtitle
+                                        )}
+                                    </span>
+                                  `
+                                : ""
+                        }
+
+                        <span class="managed-sections">
+                            ${sections.length}
+                            section${sections.length === 1 ? "" : "s"}
                         </span>
 
                     </div>
@@ -898,6 +1219,9 @@ async function loadAnnouncements() {
         manager.innerHTML = `
             <div class="no-announcements">
                 Unable to load announcements.
+                ${escapeHtml(
+                    error.message || ""
+                )}
             </div>
         `;
 
@@ -915,12 +1239,40 @@ function editAnnouncement(
     titleInput.value =
         announcement.title || "";
 
-    labelInput.value =
-        announcement.label ||
-        "ANNOUNCEMENT";
+    subtitleInput.value =
+        announcement.subtitle || "";
 
-    contentInput.value =
-        announcement.content || "";
+    clearSections();
+
+    const sections =
+        Array.isArray(
+            announcement.sections
+        )
+            ? announcement.sections
+            : [];
+
+    if (sections.length) {
+
+        sections.forEach(
+            section =>
+                addSection(section)
+        );
+
+    } else {
+
+        addSection({
+            heading:
+                announcement.title || "",
+
+            label:
+                announcement.label ||
+                "ANNOUNCEMENT",
+
+            content:
+                announcement.content || ""
+        });
+
+    }
 
     formHeading.textContent =
         "Edit Announcement";
@@ -950,7 +1302,7 @@ async function deleteAnnouncement(
 
     const confirmed =
         window.confirm(
-            `Delete "${announcement.title}"?\n\nThis cannot be undone.`
+            `Delete "${announcement.title}"?\n\nThis will permanently delete the entire announcement and all of its sections.`
         );
 
     if (!confirmed) {
@@ -986,7 +1338,9 @@ async function deleteAnnouncement(
             editingId ===
             announcement.id
         ) {
+
             resetForm();
+
         }
 
         setStatus(
@@ -1010,6 +1364,11 @@ async function deleteAnnouncement(
 
 }
 
+addSectionButton.addEventListener(
+    "click",
+    () => addSection()
+);
+
 cancelButton.addEventListener(
     "click",
     resetForm
@@ -1024,11 +1383,13 @@ form.addEventListener(
         const title =
             titleInput.value.trim();
 
-        const label =
-            labelInput.value.trim();
+        const subtitle =
+            subtitleInput.value.trim();
 
-        const content =
-            contentInput.value;
+        const sectionElements =
+            sectionsContainer.querySelectorAll(
+                ".section-editor"
+            );
 
         if (!title) {
 
@@ -1041,14 +1402,77 @@ form.addEventListener(
 
         }
 
-        if (!content.trim()) {
+        if (
+            sectionElements.length === 0
+        ) {
 
             setStatus(
-                "Please enter announcement content.",
+                "Please add at least one section.",
                 "error"
             );
 
             return;
+
+        }
+
+        const sections = [];
+
+        for (
+            const element of sectionElements
+        ) {
+
+            const heading =
+                element
+                    .querySelector(
+                        ".section-title"
+                    )
+                    .value
+                    .trim();
+
+            const label =
+                element
+                    .querySelector(
+                        ".section-label"
+                    )
+                    .value
+                    .trim();
+
+            const content =
+                element
+                    .querySelector(
+                        ".section-content"
+                    )
+                    .value;
+
+            if (!heading) {
+
+                setStatus(
+                    "Every section needs a title.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            if (!content.trim()) {
+
+                setStatus(
+                    "Every section needs content.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+            sections.push({
+                heading,
+                label:
+                    label ||
+                    "ANNOUNCEMENT",
+                content
+            });
 
         }
 
@@ -1057,7 +1481,7 @@ form.addEventListener(
 
         saveButton.textContent =
             editingId
-                ? "Saving..."
+                ? "Saving Changes..."
                 : "Publishing...";
 
         try {
@@ -1069,13 +1493,15 @@ form.addEventListener(
 
             const body = {
                 title,
-                label,
-                content
+                subtitle,
+                sections
             };
 
             if (editingId) {
+
                 body.id =
                     editingId;
+
             }
 
             const response =
@@ -1083,11 +1509,14 @@ form.addEventListener(
                     "/api/announcements",
                     {
                         method,
+
                         headers: {
                             "Content-Type":
                                 "application/json"
                         },
+
                         credentials: "include",
+
                         body:
                             JSON.stringify(body)
                     }
@@ -1105,14 +1534,17 @@ form.addEventListener(
 
             }
 
+            const wasEditing =
+                Boolean(editingId);
+
+            resetForm();
+
             setStatus(
-                editingId
+                wasEditing
                     ? "Announcement updated successfully."
                     : "Announcement published successfully.",
                 "success"
             );
-
-            resetForm();
 
             await loadAnnouncements();
 
@@ -1131,10 +1563,10 @@ form.addEventListener(
             saveButton.disabled =
                 false;
 
-            if (!editingId) {
-                saveButton.textContent =
-                    "Publish Announcement";
-            }
+            saveButton.textContent =
+                editingId
+                    ? "Save Changes"
+                    : "Publish Announcement";
 
         }
 
@@ -1152,10 +1584,21 @@ function escapeHtml(value) {
 
 }
 
+function escapeAttribute(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+}
+
+addSection();
+
 loadAnnouncements();
 
 </script>
 
 </body>
 </html>
-```
