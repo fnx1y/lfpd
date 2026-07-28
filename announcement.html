@@ -378,13 +378,14 @@
                     "/api/announcements",
                     {
                         method: "GET",
+                        credentials: "include",
                         cache: "no-store"
                     }
                 );
 
             if (!response.ok) {
                 throw new Error(
-                    "Unable to retrieve announcements."
+                    "Unable to load announcements."
                 );
             }
 
@@ -422,10 +423,7 @@
 
         } catch (error) {
 
-            console.error(
-                "Announcement loading error:",
-                error
-            );
+            console.error(error);
 
             showError(
                 "The announcement couldn't be loaded."
@@ -434,7 +432,6 @@
         }
 
     }
-
 
     function renderAnnouncement(
         announcement,
@@ -450,22 +447,18 @@
             sections
                 .map((section, index) => {
 
-                    const normalized =
-                        normalizeSection(
-                            section,
-                            index
-                        );
-
-                    const number =
-                        String(index + 1)
-                            .padStart(2, "0");
+                    const title =
+                        typeof section === "string"
+                            ? section
+                            : section.heading ||
+                              section.title ||
+                              "Section";
 
                     return `
 
                         <a href="#section-${index}">
-                            ${number} — ${escapeHtml(
-                                normalized.heading
-                            )}
+                            ${String(index + 1).padStart(2, "0")}
+                            — ${escapeHtml(title)}
                         </a>
 
                     `;
@@ -473,124 +466,116 @@
                 })
                 .join("");
 
+        let contentHtml = "";
 
-        let sectionHtml = "";
+        if (sections.length) {
 
-        if (sections.length > 0) {
+            sections.forEach(
+                (section, index) => {
 
-            sectionHtml =
-                sections
-                    .map((section, index) => {
+                    let heading =
+                        "Section";
 
-                        const normalized =
-                            normalizeSection(
-                                section,
-                                index
-                            );
+                    let label =
+                        "SECTION";
 
-                        const number =
-                            String(index + 1)
-                                .padStart(2, "0");
+                    let content =
+                        "";
 
-                        return `
+                    if (
+                        typeof section ===
+                        "string"
+                    ) {
 
-                            <section
-                                id="section-${index}"
-                                class="announcement-content-section"
-                            >
+                        heading =
+                            section;
 
-                                <span class="announcement-section-number">
-                                    ${number} — ${escapeHtml(
-                                        normalized.label
-                                    )}
-                                </span>
+                    } else {
 
-                                <h2>
-                                    ${escapeHtml(
-                                        normalized.heading
-                                    )}
-                                </h2>
+                        heading =
+                            section.heading ||
+                            section.title ||
+                            "Section";
 
-                                <div class="announcement-rich-content">
-                                    ${normalized.content}
-                                </div>
+                        label =
+                            section.label ||
+                            "SECTION";
 
-                            </section>
+                        content =
+                            section.content ||
+                            "";
 
-                        `;
+                    }
 
-                    })
-                    .join("");
+                    contentHtml += `
 
-        } else if (announcement.content) {
+                        <section
+                            id="section-${index}"
+                            class="announcement-content-section"
+                        >
 
-            sectionHtml = `
+                            <span class="announcement-section-number">
+                                ${String(index + 1).padStart(2, "0")}
+                                — ${escapeHtml(label)}
+                            </span>
 
-                <section
-                    id="section-0"
-                    class="announcement-content-section"
-                >
+                            <h2>
+                                ${escapeHtml(heading)}
+                            </h2>
 
-                    <span class="announcement-section-number">
-                        01 — ANNOUNCEMENT
-                    </span>
+                            ${
+                                content
+                                    ? `
+                                        <div class="announcement-rich-content">
+                                            ${content}
+                                        </div>
+                                      `
+                                    : ""
+                            }
 
-                    <div class="announcement-rich-content">
-                        ${announcement.content}
-                    </div>
+                        </section>
 
-                </section>
+                    `;
 
-            `;
+                }
+            );
 
-        } else {
+            if (announcement.content) {
 
-            sectionHtml = `
+                contentHtml += `
 
-                <section
-                    class="announcement-content-section"
-                >
+                    <section class="announcement-content-section">
 
-                    <div class="announcement-rich-content">
+                        <span class="announcement-section-number">
+                            ${String(sections.length + 1).padStart(2, "0")}
+                            — CONTENT
+                        </span>
 
-                        <p>
-                            This announcement has no content.
-                        </p>
+                        <div class="announcement-rich-content">
+                            ${announcement.content}
+                        </div>
 
-                    </div>
+                    </section>
 
-                </section>
-
-            `;
-
-        }
-
-
-        let publishedDate = "";
-
-        if (announcement.publishedAt) {
-
-            const date =
-                new Date(
-                    announcement.publishedAt
-                );
-
-            if (!isNaN(date.getTime())) {
-
-                publishedDate =
-                    date.toLocaleDateString(
-                        "en-US",
-                        {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric"
-                        }
-                    );
+                `;
 
             }
 
-        }
+        } else {
 
+            contentHtml = `
+
+                <section class="announcement-content-section">
+
+                    <div class="announcement-rich-content">
+                        ${announcement.content || ""}
+                    </div>
+
+                </section>
+
+            `;
+
+        }
 
         root.innerHTML = `
 
@@ -616,29 +601,13 @@
 
                 <div class="announcement-meta">
 
-                    ${
-                        publishedDate
-                            ? `
-                                <span>
-                                    ${escapeHtml(
-                                        publishedDate
-                                    )}
-                                </span>
-                              `
-                            : ""
-                    }
-
-                    ${
-                        announcement.author
-                            ? `
-                                <span>
-                                    Published by ${escapeHtml(
-                                        announcement.author
-                                    )}
-                                </span>
-                              `
-                            : ""
-                    }
+                    <span>
+                        ${escapeHtml(
+                            formatDate(
+                                announcement.publishedAt
+                            )
+                        )}
+                    </span>
 
                 </div>
 
@@ -656,11 +625,10 @@
 
             </section>
 
-
             <div class="announcement-layout">
 
                 ${
-                    sections.length > 0
+                    sections.length
                         ? `
                             <aside class="announcement-sidebar">
 
@@ -677,10 +645,9 @@
                         : ""
                 }
 
-
                 <article class="announcement-article">
 
-                    ${sectionHtml}
+                    ${contentHtml}
 
                 </article>
 
@@ -689,73 +656,6 @@
         `;
 
     }
-
-
-    function normalizeSection(
-        section,
-        index
-    ) {
-
-        if (
-            typeof section === "string"
-        ) {
-
-            return {
-
-                label:
-                    "SECTION",
-
-                heading:
-                    section || `Section ${index + 1}`,
-
-                content:
-                    ""
-
-            };
-
-        }
-
-
-        if (
-            section &&
-            typeof section === "object"
-        ) {
-
-            return {
-
-                label:
-                    section.label ||
-                    "SECTION",
-
-                heading:
-                    section.heading ||
-                    `Section ${index + 1}`,
-
-                content:
-                    typeof section.content === "string"
-                        ? section.content
-                        : ""
-
-            };
-
-        }
-
-
-        return {
-
-            label:
-                "SECTION",
-
-            heading:
-                `Section ${index + 1}`,
-
-            content:
-                ""
-
-        };
-
-    }
-
 
     function showError(message) {
 
@@ -793,38 +693,40 @@
 
     }
 
+    function formatDate(value) {
+
+        if (!value) {
+            return "";
+        }
+
+        const date =
+            new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return String(value);
+        }
+
+        return date.toLocaleDateString(
+            "en-US",
+            {
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            }
+        );
+
+    }
 
     function escapeHtml(value) {
 
         return String(value)
-
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-
-            .replace(
-                /</g,
-                "&lt;"
-            )
-
-            .replace(
-                />/g,
-                "&gt;"
-            )
-
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-
-            .replace(
-                /'/g,
-                "&#039;"
-            );
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
 
     }
-
 
     loadAnnouncement();
 
