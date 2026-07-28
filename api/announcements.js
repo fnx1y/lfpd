@@ -44,18 +44,6 @@ export default async function handler(req, res) {
 
             const id = crypto.randomUUID();
 
-            const sectionList = Array.isArray(sections)
-                ? sections
-                    .filter(section => typeof section === "string")
-                    .map(section => section.trim())
-                    .filter(Boolean)
-                    .map((section, index) => ({
-                        label: "SECTION",
-                        heading: section,
-                        content: ""
-                    }))
-                : [];
-
             const announcement = {
                 id,
                 number: announcementNumber,
@@ -64,15 +52,17 @@ export default async function handler(req, res) {
                     typeof subtitle === "string"
                         ? subtitle.trim()
                         : "",
-                date: new Date().toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                }),
-                author: "",
-                publishedAt: new Date().toISOString(),
-                sections: sectionList,
-                content
+                sections:
+                    Array.isArray(sections)
+                        ? sections
+                            .filter(section =>
+                                typeof section === "string"
+                            )
+                            .map(section => section.trim())
+                            .filter(Boolean)
+                        : [],
+                content: content,
+                publishedAt: new Date().toISOString()
             };
 
             const pathname =
@@ -82,7 +72,7 @@ export default async function handler(req, res) {
                 pathname,
                 JSON.stringify(announcement),
                 {
-                    access: "public",
+                    access: "private",
                     contentType: "application/json",
                     addRandomSuffix: false
                 }
@@ -109,28 +99,11 @@ export default async function handler(req, res) {
                         continue;
                     }
 
-                    const announcement = await response.json();
-
-                    if (!announcement.id) {
-                        continue;
-                    }
-
-                    if (!announcement.date && announcement.publishedAt) {
-                        announcement.date =
-                            new Date(
-                                announcement.publishedAt
-                            ).toLocaleDateString("en-US", {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric"
-                            });
-                    }
-
-                    if (!Array.isArray(announcement.sections)) {
-                        announcement.sections = [];
-                    }
+                    const announcement =
+                        await response.json();
 
                     announcements.push(announcement);
+
                 } catch (error) {
                     console.error(
                         "Could not read announcement:",
@@ -140,17 +113,11 @@ export default async function handler(req, res) {
                 }
             }
 
-            announcements.sort((a, b) => {
-                const dateA = new Date(
-                    a.publishedAt || 0
-                ).getTime();
-
-                const dateB = new Date(
-                    b.publishedAt || 0
-                ).getTime();
-
-                return dateB - dateA;
-            });
+            announcements.sort(
+                (a, b) =>
+                    new Date(b.publishedAt) -
+                    new Date(a.publishedAt)
+            );
 
             return res.status(200).json({
                 success: true,
@@ -162,6 +129,7 @@ export default async function handler(req, res) {
             success: false,
             error: "Method not allowed."
         });
+
     } catch (error) {
         console.error(
             "Announcement API error:",
@@ -170,9 +138,7 @@ export default async function handler(req, res) {
 
         return res.status(500).json({
             success: false,
-            error:
-                error?.message ||
-                "An internal server error occurred."
+            error: "An internal server error occurred."
         });
     }
 }
