@@ -1,3 +1,29 @@
 {
-  "announcements": []
+  "announcements": [
+    {
+      "id": "test-announcement",
+      "title": "Welcome to the LFPD Website",
+      "subtitle": "A quick look at what's new around the department.",
+      "date": "July 28, 2026",
+      "author": "LFPD",
+      "description": "A test announcement to make sure the new announcement system is working.",
+      "sections": [
+        {
+          "label": "INTRODUCTION",
+          "heading": "Welcome",
+          "content": "<p>This is a test announcement for the Los Francisco Police Department website.</p><p>The announcement system will eventually allow authorized publishing directly through a private editor.</p>"
+        },
+        {
+          "label": "WHAT'S NEW",
+          "heading": "A New Way to Share Updates",
+          "content": "<p>Published announcements will appear here for the community to read.</p><blockquote>This is an example of a quote block.</blockquote><p><strong>This text is bold.</strong> <em>This text is italic.</em></p>"
+        },
+        {
+          "label": "NEXT STEPS",
+          "heading": "More Is Coming",
+          "content": "<p>The publishing editor will eventually handle the formatting, numbering, images, and page navigation automatically.</p>"
+        }
+      ]
+    }
+  ]
 }
