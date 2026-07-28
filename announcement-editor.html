@@ -18,7 +18,7 @@
 <style>
 
 .editor-page {
-    max-width: 1100px;
+    max-width: 1150px;
     margin: 0 auto;
     padding: 100px 30px;
 }
@@ -58,12 +58,6 @@
     margin-top: 0;
 }
 
-.editor-panel-description {
-    opacity: .65;
-    line-height: 1.7;
-    margin-bottom: 25px;
-}
-
 .editor-field {
     margin-bottom: 25px;
 }
@@ -94,58 +88,59 @@
 .editor-field textarea {
     min-height: 280px;
     resize: vertical;
-    line-height: 1.6;
+    line-height: 1.7;
 }
 
 .sections-container {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
+    margin-top: 25px;
 }
 
 .section-editor {
     border: 1px solid rgba(255,255,255,.10);
     border-radius: 14px;
     padding: 25px;
-    background: rgba(255,255,255,.025);
+    background: rgba(255,255,255,.02);
 }
 
 .section-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     margin-bottom: 25px;
 }
 
-.section-heading {
+.section-top-left {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 }
 
 .section-number {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 42px;
-    height: 32px;
-    padding: 0 8px;
-    border-radius: 6px;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
     background: rgba(181,3,3,.15);
-    border: 1px solid rgba(181,3,3,.3);
-    font-size: 11px;
+    border: 1px solid rgba(181,3,3,.35);
+    font-size: 12px;
     font-weight: 800;
-    letter-spacing: 1px;
 }
 
 .section-top h3 {
     margin: 0;
-    font-size: 19px;
+    font-size: 18px;
 }
 
 .remove-section {
     border: 0;
-    background: #b50303;
+    background: rgba(181,3,3,.15);
+    border: 1px solid rgba(181,3,3,.3);
     color: white;
     padding: 9px 14px;
     border-radius: 7px;
@@ -153,22 +148,26 @@
     font-weight: 700;
 }
 
+.remove-section:hover {
+    background: #b50303;
+}
+
 .add-section {
     width: 100%;
-    padding: 16px;
+    padding: 17px;
     border: 1px dashed rgba(255,255,255,.2);
     background: transparent;
     color: inherit;
-    border-radius: 8px;
+    border-radius: 9px;
     cursor: pointer;
     margin-top: 20px;
     font-weight: 700;
-    transition: .2s ease;
+    font-size: 14px;
 }
 
 .add-section:hover {
-    background: rgba(255,255,255,.04);
-    border-color: rgba(255,255,255,.35);
+    border-color: rgba(181,3,3,.6);
+    background: rgba(181,3,3,.06);
 }
 
 .editor-actions {
@@ -209,7 +208,6 @@
     padding: 15px;
     border-radius: 8px;
     display: none;
-    line-height: 1.5;
 }
 
 .editor-status.success {
@@ -226,18 +224,21 @@
 
 .announcement-manager {
     display: grid;
-    gap: 12px;
+    gap: 15px;
 }
 
 .managed-announcement {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
     border: 1px solid rgba(255,255,255,.08);
-    border-radius: 10px;
+    border-radius: 12px;
     background: rgba(255,255,255,.02);
+    padding: 22px;
+}
+
+.managed-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
 }
 
 .managed-info {
@@ -250,28 +251,20 @@
     font-weight: 800;
     letter-spacing: 2px;
     opacity: .45;
-    margin-bottom: 6px;
+    margin-bottom: 7px;
 }
 
 .managed-title {
     display: block;
-    font-size: 17px;
+    font-size: 20px;
     font-weight: 700;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
 }
 
 .managed-subtitle {
     display: block;
     font-size: 13px;
     opacity: .55;
-    margin-bottom: 8px;
-}
-
-.managed-sections {
-    display: block;
-    font-size: 11px;
-    letter-spacing: 1px;
-    opacity: .45;
 }
 
 .managed-buttons {
@@ -298,6 +291,24 @@
     background: #b50303;
 }
 
+.managed-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.managed-section {
+    padding: 8px 11px;
+    border-radius: 6px;
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.07);
+    font-size: 11px;
+    letter-spacing: .5px;
+}
+
 .no-announcements {
     padding: 25px;
     border-radius: 10px;
@@ -315,8 +326,7 @@
         font-size: 38px;
     }
 
-    .managed-announcement {
-        align-items: flex-start;
+    .managed-top {
         flex-direction: column;
     }
 
@@ -335,11 +345,6 @@
 
     .section-top {
         align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .remove-section {
-        width: 100%;
     }
 
 }
@@ -631,9 +636,9 @@
 
         <p>
             Create, edit, and remove department announcements.
-            Each announcement can contain multiple sections.
-            Those sections become the bookmark navigation on
-            the published announcement page.
+            Each announcement can contain multiple sections,
+            with every section appearing as its own bookmark
+            on the Department Announcements page.
         </p>
 
     </section>
@@ -644,18 +649,12 @@
             Create Announcement
         </h2>
 
-        <p class="editor-panel-description">
-            Start by entering the information for the overall
-            announcement. Then add the sections that will appear
-            as bookmarks on the left side of the published page.
-        </p>
-
         <form id="announcement-form">
 
             <div class="editor-field">
 
                 <label for="title">
-                    Announcement Title
+                    Main Title
                 </label>
 
                 <input
@@ -670,7 +669,7 @@
             <div class="editor-field">
 
                 <label for="subtitle">
-                    Announcement Subtitle
+                    Subtitle
                 </label>
 
                 <input
@@ -681,20 +680,19 @@
 
             </div>
 
-            <div class="editor-panel" style="margin: 30px 0 0; padding: 25px;">
+            <div class="editor-panel" style="padding:0;border:0;background:transparent;">
 
                 <h2>
                     Sections
                 </h2>
 
-                <p class="editor-panel-description">
-                    Each section becomes a bookmark in the
-                    "ON THIS PAGE" navigation. Add as many
-                    sections as you need.
+                <p style="opacity:.65;">
+                    Each section becomes a separate bookmark
+                    on the left side of the published announcement.
                 </p>
 
                 <div
-                    id="sections-container"
+                    id="sections"
                     class="sections-container"
                 ></div>
 
@@ -744,10 +742,9 @@
             Published Announcements
         </h2>
 
-        <p class="editor-panel-description">
-            Manage announcements currently published on
-            the website. Editing an announcement edits its
-            entire page and all of its sections.
+        <p>
+            Manage announcements currently published
+            on the website.
         </p>
 
         <div
@@ -815,7 +812,7 @@ const subtitleInput =
 
 const sectionsContainer =
     document.getElementById(
-        "sections-container"
+        "sections"
     );
 
 const addSectionButton =
@@ -864,8 +861,8 @@ function setStatus(
 
 }
 
-function addSection(
-    sectionData = null
+function createSection(
+    sectionData = {}
 ) {
 
     sectionCounter++;
@@ -878,31 +875,18 @@ function addSection(
     section.className =
         "section-editor";
 
-    section.dataset.section =
-        sectionCounter;
-
-    const heading =
-        sectionData?.heading || "";
-
-    const label =
-        sectionData?.label ||
-        "ANNOUNCEMENT";
-
-    const content =
-        sectionData?.content || "";
-
     section.innerHTML = `
 
         <div class="section-top">
 
-            <div class="section-heading">
+            <div class="section-top-left">
 
-                <span class="section-number">
+                <div class="section-number">
                     01
-                </span>
+                </div>
 
                 <h3>
-                    Section 1
+                    Section
                 </h3>
 
             </div>
@@ -911,7 +895,7 @@ function addSection(
                 type="button"
                 class="remove-section"
             >
-                Remove Section
+                Remove
             </button>
 
         </div>
@@ -924,9 +908,8 @@ function addSection(
 
             <input
                 type="text"
-                class="section-title"
-                placeholder="Example: New Patrol Procedures"
-                value="${escapeAttribute(heading)}"
+                class="section-heading"
+                placeholder="Enter section title"
                 required
             >
 
@@ -941,7 +924,7 @@ function addSection(
             <input
                 type="text"
                 class="section-label"
-                value="${escapeAttribute(label)}"
+                value="ANNOUNCEMENT"
                 placeholder="ANNOUNCEMENT"
             >
 
@@ -955,28 +938,45 @@ function addSection(
 
             <textarea
                 class="section-content"
-                placeholder="Write the content for this section..."
+                placeholder="Write the section content here..."
                 required
-            >${escapeHtml(content)}</textarea>
+            ></textarea>
 
         </div>
 
     `;
 
-    section
-        .querySelector(
-            ".remove-section"
-        )
-        .addEventListener(
-            "click",
-            () => {
+    section.querySelector(
+        ".section-heading"
+    ).value =
+        sectionData.heading ||
+        sectionData.title ||
+        "";
 
-                section.remove();
+    section.querySelector(
+        ".section-label"
+    ).value =
+        sectionData.label ||
+        "ANNOUNCEMENT";
 
-                updateSectionNumbers();
+    section.querySelector(
+        ".section-content"
+    ).value =
+        sectionData.content ||
+        "";
 
-            }
-        );
+    section.querySelector(
+        ".remove-section"
+    ).addEventListener(
+        "click",
+        () => {
+
+            section.remove();
+
+            updateSectionNumbers();
+
+        }
+    );
 
     sectionsContainer.appendChild(
         section
@@ -997,36 +997,21 @@ function updateSectionNumbers() {
         (section, index) => {
 
             const number =
-                section.querySelector(
-                    ".section-number"
-                );
-
-            const heading =
-                section.querySelector(
-                    ".section-heading h3"
-                );
-
-            const formatted =
                 String(index + 1)
                     .padStart(2, "0");
 
-            number.textContent =
-                formatted;
+            section.querySelector(
+                ".section-number"
+            ).textContent =
+                number;
 
-            heading.textContent =
+            section.querySelector(
+                ".section-top h3"
+            ).textContent =
                 `Section ${index + 1}`;
 
         }
     );
-
-}
-
-function clearSections() {
-
-    sectionsContainer.innerHTML =
-        "";
-
-    sectionCounter = 0;
 
 }
 
@@ -1036,9 +1021,12 @@ function resetForm() {
 
     form.reset();
 
-    clearSections();
+    sectionsContainer.innerHTML =
+        "";
 
-    addSection();
+    sectionCounter = 0;
+
+    createSection();
 
     formHeading.textContent =
         "Create Announcement";
@@ -1054,6 +1042,46 @@ function resetForm() {
 
     status.textContent =
         "";
+
+}
+
+function getSections() {
+
+    const elements =
+        sectionsContainer.querySelectorAll(
+            ".section-editor"
+        );
+
+    const sections = [];
+
+    elements.forEach(
+        element => {
+
+            const heading =
+                element.querySelector(
+                    ".section-heading"
+                ).value.trim();
+
+            const label =
+                element.querySelector(
+                    ".section-label"
+                ).value.trim();
+
+            const content =
+                element.querySelector(
+                    ".section-content"
+                ).value;
+
+            sections.push({
+                heading,
+                label,
+                content
+            });
+
+        }
+    );
+
+    return sections;
 
 }
 
@@ -1090,7 +1118,9 @@ async function loadAnnouncements() {
         }
 
         const announcements =
-            Array.isArray(data.announcements)
+            Array.isArray(
+                data.announcements
+            )
                 ? data.announcements
                 : [];
 
@@ -1106,8 +1136,7 @@ async function loadAnnouncements() {
 
         }
 
-        manager.innerHTML =
-            "";
+        manager.innerHTML = "";
 
         announcements.forEach(
             (announcement, index) => {
@@ -1129,81 +1158,97 @@ async function loadAnnouncements() {
 
                 item.innerHTML = `
 
-                    <div class="managed-info">
+                    <div class="managed-top">
 
-                        <span class="managed-number">
-                            ${String(index + 1).padStart(2, "0")}
-                        </span>
+                        <div class="managed-info">
 
-                        <span class="managed-title">
-                            ${escapeHtml(
-                                announcement.title ||
-                                "Untitled Announcement"
-                            )}
-                        </span>
+                            <span class="managed-number">
+                                ${String(index + 1).padStart(2, "0")}
+                            </span>
 
-                        ${
-                            announcement.subtitle
-                                ? `
-                                    <span class="managed-subtitle">
-                                        ${escapeHtml(
-                                            announcement.subtitle
-                                        )}
-                                    </span>
-                                  `
-                                : ""
-                        }
+                            <span class="managed-title">
+                                ${escapeHtml(
+                                    announcement.title ||
+                                    "Untitled Announcement"
+                                )}
+                            </span>
 
-                        <span class="managed-sections">
-                            ${sections.length}
-                            section${sections.length === 1 ? "" : "s"}
-                        </span>
+                            <span class="managed-subtitle">
+                                ${escapeHtml(
+                                    announcement.subtitle ||
+                                    ""
+                                )}
+                            </span>
+
+                        </div>
+
+                        <div class="managed-buttons">
+
+                            <button
+                                type="button"
+                                class="edit-button"
+                            >
+                                Edit
+                            </button>
+
+                            <button
+                                type="button"
+                                class="delete-button"
+                            >
+                                Delete
+                            </button>
+
+                        </div>
 
                     </div>
 
-                    <div class="managed-buttons">
+                    <div class="managed-sections">
 
-                        <button
-                            type="button"
-                            class="edit-button"
-                        >
-                            Edit
-                        </button>
-
-                        <button
-                            type="button"
-                            class="delete-button"
-                        >
-                            Delete
-                        </button>
+                        ${
+                            sections.length
+                                ? sections.map(
+                                    (section, sectionIndex) => `
+                                        <span class="managed-section">
+                                            ${String(sectionIndex + 1).padStart(2, "0")}
+                                            —
+                                            ${escapeHtml(
+                                                section.heading ||
+                                                section.title ||
+                                                "Untitled Section"
+                                            )}
+                                        </span>
+                                    `
+                                ).join("")
+                                : `
+                                    <span class="managed-section">
+                                        No sections
+                                    </span>
+                                `
+                        }
 
                     </div>
 
                 `;
 
-                item
-                    .querySelector(
-                        ".edit-button"
-                    )
-                    .addEventListener(
-                        "click",
-                        () =>
-                            editAnnouncement(
-                                announcement
-                            )
-                    );
+                item.querySelector(
+                    ".edit-button"
+                ).addEventListener(
+                    "click",
+                    () =>
+                        editAnnouncement(
+                            announcement
+                        )
+                );
 
-                item
-                    .querySelector(
-                        ".delete-button"
-                    )
-                    .addEventListener(
-                        "click",
-                        () =>
-                            deleteAnnouncement(
-                                announcement
-                            )
-                    );
+                item.querySelector(
+                    ".delete-button"
+                ).addEventListener(
+                    "click",
+                    () =>
+                        deleteAnnouncement(
+                            announcement
+                        )
+                );
 
                 manager.appendChild(
                     item
@@ -1219,9 +1264,6 @@ async function loadAnnouncements() {
         manager.innerHTML = `
             <div class="no-announcements">
                 Unable to load announcements.
-                ${escapeHtml(
-                    error.message || ""
-                )}
             </div>
         `;
 
@@ -1237,12 +1279,17 @@ function editAnnouncement(
         announcement.id;
 
     titleInput.value =
-        announcement.title || "";
+        announcement.title ||
+        "";
 
     subtitleInput.value =
-        announcement.subtitle || "";
+        announcement.subtitle ||
+        "";
 
-    clearSections();
+    sectionsContainer.innerHTML =
+        "";
+
+    sectionCounter = 0;
 
     const sections =
         Array.isArray(
@@ -1255,22 +1302,14 @@ function editAnnouncement(
 
         sections.forEach(
             section =>
-                addSection(section)
+                createSection(
+                    section
+                )
         );
 
     } else {
 
-        addSection({
-            heading:
-                announcement.title || "",
-
-            label:
-                announcement.label ||
-                "ANNOUNCEMENT",
-
-            content:
-                announcement.content || ""
-        });
+        createSection();
 
     }
 
@@ -1302,7 +1341,7 @@ async function deleteAnnouncement(
 
     const confirmed =
         window.confirm(
-            `Delete "${announcement.title}"?\n\nThis will permanently delete the entire announcement and all of its sections.`
+            `Delete "${announcement.title || "this announcement"}"?\n\nThis will delete the entire announcement and all of its sections. This cannot be undone.`
         );
 
     if (!confirmed) {
@@ -1366,7 +1405,7 @@ async function deleteAnnouncement(
 
 addSectionButton.addEventListener(
     "click",
-    () => addSection()
+    () => createSection()
 );
 
 cancelButton.addEventListener(
@@ -1386,15 +1425,13 @@ form.addEventListener(
         const subtitle =
             subtitleInput.value.trim();
 
-        const sectionElements =
-            sectionsContainer.querySelectorAll(
-                ".section-editor"
-            );
+        const sections =
+            getSections();
 
         if (!title) {
 
             setStatus(
-                "Please enter an announcement title.",
+                "Please enter a main title.",
                 "error"
             );
 
@@ -1402,12 +1439,10 @@ form.addEventListener(
 
         }
 
-        if (
-            sectionElements.length === 0
-        ) {
+        if (!sections.length) {
 
             setStatus(
-                "Please add at least one section.",
+                "At least one section is required.",
                 "error"
             );
 
@@ -1415,39 +1450,16 @@ form.addEventListener(
 
         }
 
-        const sections = [];
-
         for (
-            const element of sectionElements
+            let i = 0;
+            i < sections.length;
+            i++
         ) {
 
-            const heading =
-                element
-                    .querySelector(
-                        ".section-title"
-                    )
-                    .value
-                    .trim();
-
-            const label =
-                element
-                    .querySelector(
-                        ".section-label"
-                    )
-                    .value
-                    .trim();
-
-            const content =
-                element
-                    .querySelector(
-                        ".section-content"
-                    )
-                    .value;
-
-            if (!heading) {
+            if (!sections[i].heading) {
 
                 setStatus(
-                    "Every section needs a title.",
+                    `Section ${i + 1} needs a title.`,
                     "error"
                 );
 
@@ -1455,24 +1467,16 @@ form.addEventListener(
 
             }
 
-            if (!content.trim()) {
+            if (!sections[i].content.trim()) {
 
                 setStatus(
-                    "Every section needs content.",
+                    `Section ${i + 1} needs content.`,
                     "error"
                 );
 
                 return;
 
             }
-
-            sections.push({
-                heading,
-                label:
-                    label ||
-                    "ANNOUNCEMENT",
-                content
-            });
 
         }
 
@@ -1481,7 +1485,7 @@ form.addEventListener(
 
         saveButton.textContent =
             editingId
-                ? "Saving Changes..."
+                ? "Saving..."
                 : "Publishing...";
 
         try {
@@ -1492,9 +1496,13 @@ form.addEventListener(
                     : "POST";
 
             const body = {
+
                 title,
+
                 subtitle,
+
                 sections
+
             };
 
             if (editingId) {
@@ -1518,7 +1526,10 @@ form.addEventListener(
                         credentials: "include",
 
                         body:
-                            JSON.stringify(body)
+                            JSON.stringify(
+                                body
+                            )
+
                     }
                 );
 
@@ -1535,7 +1546,9 @@ form.addEventListener(
             }
 
             const wasEditing =
-                Boolean(editingId);
+                Boolean(
+                    editingId
+                );
 
             resetForm();
 
@@ -1563,10 +1576,12 @@ form.addEventListener(
             saveButton.disabled =
                 false;
 
-            saveButton.textContent =
-                editingId
-                    ? "Save Changes"
-                    : "Publish Announcement";
+            if (!editingId) {
+
+                saveButton.textContent =
+                    "Publish Announcement";
+
+            }
 
         }
 
@@ -1576,29 +1591,35 @@ form.addEventListener(
 function escapeHtml(value) {
 
     return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
-function escapeAttribute(value) {
-
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/"/g, "&quot;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-
-}
-
-addSection();
+createSection();
 
 loadAnnouncements();
 
 </script>
 
 </body>
+
 </html>
