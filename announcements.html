@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-
 <html lang="en">
+
 <head>
 
-```
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Announcements | LFPD</title>
 
@@ -14,26 +16,32 @@
     content="Official announcements from the Los Francisco Police Department."
 >
 
-<link rel="stylesheet" href="style.css">
-```
+<link
+    rel="stylesheet"
+    href="style.css"
+>
 
 </head>
 
 <body>
 
-```
 <div class="page-overlay"></div>
 
 <header class="topbar">
 
-    <a href="index.html" class="brand">
+    <a
+        href="index.html"
+        class="brand"
+    >
 
         <img
             src="assets/logo.png"
             alt="Los Francisco Police Department logo"
         >
 
-        <span>LFPD</span>
+        <span>
+            LFPD
+        </span>
 
     </a>
 
@@ -134,17 +142,17 @@
                         Rank Structure
                     </a>
 
-                    <a href="mission.html">
-                        Mission & Values
-                    </a>
-
                 </div>
 
                 <div class="dropdown-column">
 
                     <span class="dropdown-label">
-                        Department Updates
+                        Our Purpose
                     </span>
+
+                    <a href="mission.html">
+                        Mission & Values
+                    </a>
 
                     <a href="announcements.html">
                         Announcements
@@ -388,192 +396,229 @@
 
 <script>
 
-    async function loadAnnouncements() {
+async function loadAnnouncements() {
 
-        const container =
-            document.getElementById("announcements-list");
+    const container =
+        document.getElementById(
+            "announcements-list"
+        );
 
-        try {
+    try {
 
-            const response =
-                await fetch("/api/announcements", {
+        const response =
+            await fetch(
+                "/api/announcements",
+                {
                     method: "GET",
                     credentials: "include",
                     cache: "no-store"
-                });
-
-            if (!response.ok) {
-                throw new Error("Unable to load announcements.");
-            }
-
-            const data =
-                await response.json();
-
-            const announcements =
-                Array.isArray(data.announcements)
-                    ? data.announcements
-                    : [];
-
-            if (announcements.length === 0) {
-
-                container.innerHTML = `
-
-                    <div class="announcement-empty">
-
-                        <span>
-                            NOTHING HERE YET
-                        </span>
-
-                        <h3>
-                            No announcements have been published.
-                        </h3>
-
-                        <p>
-                            When a department announcement is published,
-                            it will appear here.
-                        </p>
-
-                    </div>
-
-                `;
-
-                return;
-
-            }
-
-            container.innerHTML = "";
-
-            announcements.forEach(
-                (announcement, index) => {
-
-                    const card =
-                        document.createElement("article");
-
-                    card.className =
-                        "announcement-card";
-
-                    const number =
-                        announcement.number ||
-                        String(
-                            announcements.length - index
-                        ).padStart(3, "0");
-
-                    const date =
-                        formatDate(
-                            announcement.publishedAt
-                        );
-
-                    card.innerHTML = `
-
-                        <div class="announcement-card-number">
-                            ${escapeHtml(number)}
-                        </div>
-
-                        <div class="announcement-card-content">
-
-                            <span class="announcement-card-date">
-                                ${escapeHtml(date)}
-                            </span>
-
-                            <h3>
-                                ${escapeHtml(
-                                    announcement.title ||
-                                    "Untitled Announcement"
-                                )}
-                            </h3>
-
-                            <p>
-                                ${escapeHtml(
-                                    announcement.subtitle ||
-                                    "Official Los Francisco Police Department announcement."
-                                )}
-                            </p>
-
-                            <a
-                                class="announcement-card-link"
-                                href="announcement.html?id=${encodeURIComponent(
-                                    announcement.id || ""
-                                )}"
-                            >
-                                Read announcement →
-                            </a>
-
-                        </div>
-
-                    `;
-
-                    container.appendChild(card);
-
                 }
             );
 
-        } catch (error) {
+        if (!response.ok) {
+            throw new Error(
+                "Unable to load announcements."
+            );
+        }
 
-            console.error(error);
+        const data =
+            await response.json();
+
+        const announcements =
+            Array.isArray(
+                data.announcements
+            )
+                ? data.announcements
+                : [];
+
+        if (
+            announcements.length === 0
+        ) {
 
             container.innerHTML = `
 
                 <div class="announcement-empty">
 
                     <span>
-                        ERROR
+                        NOTHING HERE YET
                     </span>
 
                     <h3>
-                        Announcements couldn't be loaded.
+                        No announcements have been published.
                     </h3>
 
                     <p>
-                        Please try again later.
+                        When a department announcement is published,
+                        it will appear here.
                     </p>
 
                 </div>
 
             `;
 
+            return;
+
         }
 
-    }
+        container.innerHTML = "";
 
-    function formatDate(value) {
+        announcements.forEach(
+            (announcement, index) => {
 
-        if (!value) {
-            return "";
-        }
+                const card =
+                    document.createElement(
+                        "article"
+                    );
 
-        const date =
-            new Date(value);
+                card.className =
+                    "announcement-card";
 
-        if (Number.isNaN(date.getTime())) {
-            return String(value);
-        }
+                const number =
+                    announcement.number ||
+                    String(
+                        announcements.length -
+                        index
+                    ).padStart(
+                        3,
+                        "0"
+                    );
 
-        return date.toLocaleDateString(
-            "en-US",
-            {
-                year: "numeric",
-                month: "long",
-                day: "numeric"
+                const date =
+                    formatDate(
+                        announcement.publishedAt
+                    );
+
+                card.innerHTML = `
+
+                    <div class="announcement-card-number">
+                        ${escapeHtml(number)}
+                    </div>
+
+                    <div class="announcement-card-content">
+
+                        <span class="announcement-card-date">
+                            ${escapeHtml(date)}
+                        </span>
+
+                        <h3>
+                            ${escapeHtml(
+                                announcement.title ||
+                                "Untitled Announcement"
+                            )}
+                        </h3>
+
+                        <p>
+                            ${escapeHtml(
+                                announcement.subtitle ||
+                                "Official Los Francisco Police Department announcement."
+                            )}
+                        </p>
+
+                        <a
+                            class="announcement-card-link"
+                            href="announcement.html?id=${encodeURIComponent(
+                                announcement.id || ""
+                            )}"
+                        >
+                            Read announcement →
+                        </a>
+
+                    </div>
+
+                `;
+
+                container.appendChild(
+                    card
+                );
+
             }
         );
 
+    } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+
+            <div class="announcement-empty">
+
+                <span>
+                    ERROR
+                </span>
+
+                <h3>
+                    Announcements couldn't be loaded.
+                </h3>
+
+                <p>
+                    Please try again later.
+                </p>
+
+            </div>
+
+        `;
+
     }
 
-    function escapeHtml(value) {
+}
 
-        return String(value)
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
+function formatDate(value) {
 
+    if (!value) {
+        return "";
     }
 
-    loadAnnouncements();
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return String(value);
+    }
+
+    return date.toLocaleDateString(
+        "en-US",
+        {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+}
+
+function escapeHtml(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+loadAnnouncements();
 
 </script>
-```
 
 </body>
 </html>
