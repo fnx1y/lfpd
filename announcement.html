@@ -1,26 +1,194 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
->
-
-<title>Announcement | LFPD</title>
+<title>Announcements | LFPD</title>
 
 <meta
     name="description"
-    content="Los Francisco Police Department announcement."
+    content="Official announcements from the Los Francisco Police Department."
 >
 
-<link
-    rel="stylesheet"
-    href="style.css"
->
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+.announcement-documentation-layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 80px;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 80px 30px 120px;
+}
+
+.announcement-sidebar {
+    position: sticky;
+    top: 120px;
+    align-self: start;
+}
+
+.announcement-sidebar > span {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    opacity: .55;
+    margin-bottom: 18px;
+}
+
+.announcement-bookmark {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 18px 20px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 10px;
+    background: rgba(255,255,255,.025);
+    color: inherit;
+    text-decoration: none;
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+}
+
+.announcement-bookmark:hover {
+    transform: translateX(5px);
+    border-color: rgba(181,3,3,.5);
+    background: rgba(181,3,3,.08);
+}
+
+.announcement-bookmark.active {
+    border-color: rgba(181,3,3,.7);
+    background: rgba(181,3,3,.12);
+}
+
+.announcement-bookmark-number {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 800;
+    opacity: .5;
+    margin-bottom: 7px;
+}
+
+.announcement-bookmark-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.announcement-bookmark-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    margin-top: 8px;
+    opacity: .45;
+    font-weight: 700;
+}
+
+.announcement-content {
+    min-width: 0;
+}
+
+.announcement-section {
+    scroll-margin-top: 120px;
+    padding-bottom: 100px;
+    margin-bottom: 100px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.announcement-section:last-child {
+    margin-bottom: 0;
+}
+
+.announcement-section .documentation-eyebrow {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.announcement-section h2 {
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.05;
+    margin: 0 0 25px;
+}
+
+.announcement-date {
+    display: block;
+    font-size: 12px;
+    opacity: .5;
+    margin-bottom: 30px;
+}
+
+.announcement-rich-content {
+    font-size: 17px;
+    line-height: 1.85;
+    max-width: 800px;
+}
+
+.announcement-rich-content p {
+    margin: 0 0 24px;
+}
+
+.announcement-rich-content ul,
+.announcement-rich-content ol {
+    padding-left: 25px;
+    margin-bottom: 25px;
+}
+
+.announcement-rich-content li {
+    margin-bottom: 10px;
+}
+
+.announcement-empty {
+    padding: 80px 0;
+}
+
+.announcement-empty span {
+    display: block;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    opacity: .5;
+    margin-bottom: 15px;
+}
+
+.announcement-empty h2 {
+    font-size: 40px;
+    margin: 0 0 15px;
+}
+
+.announcement-empty p {
+    opacity: .65;
+}
+
+@media (max-width: 850px) {
+
+    .announcement-documentation-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+        padding-top: 50px;
+    }
+
+    .announcement-sidebar {
+        position: static;
+    }
+
+    .announcement-bookmark {
+        margin-bottom: 8px;
+    }
+
+}
+
+</style>
 
 </head>
 
@@ -30,28 +198,20 @@
 
 <header class="topbar">
 
-    <a
-        href="index.html"
-        class="brand"
-    >
+    <a href="index.html" class="brand">
 
         <img
             src="assets/logo.png"
             alt="Los Francisco Police Department logo"
         >
 
-        <span>
-            LFPD
-        </span>
+        <span>LFPD</span>
 
     </a>
 
     <nav class="navigation">
 
-        <a
-            href="index.html"
-            class="nav-link"
-        >
+        <a href="index.html" class="nav-link">
             Home
         </a>
 
@@ -76,10 +236,6 @@
 
                     <a href="rules.html">
                         Department Rules
-                    </a>
-
-                    <a href="articles.html">
-                        Articles
                     </a>
 
                     <a href="faq.html">
@@ -300,27 +456,86 @@
         rel="noopener noreferrer"
         class="join-button"
     >
-        Open Discord
+        Discord Server
     </a>
 
 </header>
 
-<main
-    id="announcement-root"
-    class="announcement-page"
->
+<main class="documentation-page">
 
-    <div class="announcement-loading">
+    <section class="documentation-hero">
 
-        <span>
-            LOADING
+        <a
+            href="index.html"
+            class="back-link"
+        >
+            ← Back to Home
+        </a>
+
+        <span class="documentation-eyebrow">
+            LOS FRANCISCO POLICE DEPARTMENT
         </span>
 
         <h1>
-            Loading announcement...
+            Department
+            <br>
+            Announcements.
         </h1>
 
-    </div>
+        <div class="documentation-meta">
+
+            <span>
+                Department Updates
+            </span>
+
+            <span>
+                Notices • Information • Updates
+            </span>
+
+        </div>
+
+    </section>
+
+    <section
+        id="announcement-layout"
+        class="announcement-documentation-layout"
+    >
+
+        <aside
+            id="announcement-sidebar"
+            class="announcement-sidebar"
+        >
+
+            <span>
+                ON THIS PAGE
+            </span>
+
+        </aside>
+
+        <article
+            id="announcement-content"
+            class="announcement-content"
+        >
+
+            <div class="announcement-empty">
+
+                <span>
+                    LOADING
+                </span>
+
+                <h2>
+                    Loading announcements...
+                </h2>
+
+                <p>
+                    Please wait while department announcements are retrieved.
+                </p>
+
+            </div>
+
+        </article>
+
+    </section>
 
 </main>
 
@@ -357,30 +572,17 @@
 
 <script>
 
-async function loadAnnouncement() {
+async function loadAnnouncements() {
 
-    const root =
+    const sidebar =
         document.getElementById(
-            "announcement-root"
+            "announcement-sidebar"
         );
 
-    const params =
-        new URLSearchParams(
-            window.location.search
+    const content =
+        document.getElementById(
+            "announcement-content"
         );
-
-    const id =
-        params.get("id");
-
-    if (!id) {
-
-        showError(
-            "No announcement was specified."
-        );
-
-        return;
-
-    }
 
     try {
 
@@ -404,174 +606,234 @@ async function loadAnnouncement() {
             await response.json();
 
         const announcements =
-            Array.isArray(
-                data.announcements
-            )
+            Array.isArray(data.announcements)
                 ? data.announcements
                 : [];
 
-        const announcement =
-            announcements.find(
-                item =>
-                    String(item.id) ===
-                    String(id)
-            );
+        if (!announcements.length) {
 
-        if (!announcement) {
+            sidebar.innerHTML = `
+                <span>
+                    ON THIS PAGE
+                </span>
+            `;
 
-            showError(
-                "That announcement could not be found."
-            );
+            content.innerHTML = `
+
+                <div class="announcement-empty">
+
+                    <span>
+                        NOTHING HERE YET
+                    </span>
+
+                    <h2>
+                        No announcements have been published.
+                    </h2>
+
+                    <p>
+                        Department announcements will appear here once published.
+                    </p>
+
+                </div>
+
+            `;
 
             return;
-
         }
 
-        document.title =
-            `${
-                announcement.title ||
-                "Announcement"
-            } | LFPD`;
-
-        renderAnnouncement(
-            announcement,
-            root
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        showError(
-            "The announcement couldn't be loaded."
-        );
-
-    }
-
-}
-
-function renderAnnouncement(
-    announcement,
-    root
-) {
-
-    root.innerHTML = `
-
-        <section class="announcement-hero">
-
-            <a
-                href="announcements.html"
-                class="back-link"
-            >
-                ← All Announcements
-            </a>
-
-            <span class="documentation-eyebrow">
-                LOS FRANCISCO POLICE DEPARTMENT
+        sidebar.innerHTML = `
+            <span>
+                ON THIS PAGE
             </span>
+        `;
 
-            <h1>
-                ${escapeHtml(
-                    announcement.title ||
-                    "Untitled Announcement"
-                )}
-            </h1>
+        content.innerHTML = "";
 
-            <div class="announcement-meta">
+        announcements.forEach(
+            (announcement, index) => {
 
-                <span>
-                    ${escapeHtml(
-                        formatDate(
-                            announcement.publishedAt
-                        )
-                    )}
-                </span>
+                const number =
+                    String(index + 1)
+                        .padStart(2, "0");
 
-            </div>
+                const sectionId =
+                    `announcement-${announcement.id}`;
 
-            ${
-                announcement.subtitle
-                    ? `
-                        <p class="announcement-subtitle">
-                            ${escapeHtml(
-                                announcement.subtitle
-                            )}
-                        </p>
-                      `
-                    : ""
-            }
+                const bookmark =
+                    document.createElement("a");
 
-        </section>
+                bookmark.href =
+                    `#${sectionId}`;
 
-        <div class="announcement-layout">
+                bookmark.className =
+                    "announcement-bookmark";
 
-            <article class="announcement-article">
+                bookmark.innerHTML = `
 
-                <section
-                    class="announcement-content-section"
-                >
+                    <span class="announcement-bookmark-number">
+                        ${number}
+                    </span>
 
-                    <span
-                        class="announcement-section-number"
-                    >
+                    <span class="announcement-bookmark-title">
+                        ${escapeHtml(
+                            announcement.title ||
+                            "Untitled Announcement"
+                        )}
+                    </span>
+
+                    <span class="announcement-bookmark-label">
                         ${escapeHtml(
                             announcement.label ||
                             "ANNOUNCEMENT"
                         )}
                     </span>
 
-                    <div
-                        class="announcement-rich-content"
-                    >
-                        ${
-                            announcement.content ||
-                            ""
-                        }
+                `;
+
+                sidebar.appendChild(
+                    bookmark
+                );
+
+                const section =
+                    document.createElement("section");
+
+                section.id =
+                    sectionId;
+
+                section.className =
+                    "announcement-section";
+
+                section.innerHTML = `
+
+                    <span class="documentation-eyebrow">
+                        ${number} — ${escapeHtml(
+                            announcement.label ||
+                            "ANNOUNCEMENT"
+                        )}
+                    </span>
+
+                    <h2>
+                        ${escapeHtml(
+                            announcement.title ||
+                            "Untitled Announcement"
+                        )}
+                    </h2>
+
+                    <span class="announcement-date">
+                        Published ${escapeHtml(
+                            formatDate(
+                                announcement.publishedAt
+                            )
+                        )}
+                    </span>
+
+                    <div class="announcement-rich-content">
+                        ${announcement.content || ""}
                     </div>
 
-                </section>
+                `;
 
-            </article>
+                content.appendChild(
+                    section
+                );
 
-        </div>
+            }
+        );
 
-    `;
+        setupBookmarkTracking();
+
+    } catch (error) {
+
+        console.error(error);
+
+        content.innerHTML = `
+
+            <div class="announcement-empty">
+
+                <span>
+                    ERROR
+                </span>
+
+                <h2>
+                    Announcements couldn't be loaded.
+                </h2>
+
+                <p>
+                    Please try again later.
+                </p>
+
+            </div>
+
+        `;
+
+    }
 
 }
 
-function showError(message) {
+function setupBookmarkTracking() {
 
-    const root =
-        document.getElementById(
-            "announcement-root"
+    const bookmarks =
+        document.querySelectorAll(
+            ".announcement-bookmark"
         );
 
-    root.innerHTML = `
+    const sections =
+        document.querySelectorAll(
+            ".announcement-section"
+        );
 
-        <section class="announcement-error">
+    if (!sections.length) {
+        return;
+    }
 
-            <span>
-                ANNOUNCEMENT
-            </span>
+    const observer =
+        new IntersectionObserver(
+            entries => {
 
-            <h1>
-                Unable to load
-            </h1>
+                entries.forEach(
+                    entry => {
 
-            <p>
-                ${escapeHtml(message)}
-            </p>
+                        if (!entry.isIntersecting) {
+                            return;
+                        }
 
-            <a
-                href="announcements.html"
-                class="primary-button"
-            >
-                Back to Announcements
-            </a>
+                        bookmarks.forEach(
+                            bookmark => {
+                                bookmark.classList.remove(
+                                    "active"
+                                );
+                            }
+                        );
 
-        </section>
+                        const active =
+                            document.querySelector(
+                                `.announcement-bookmark[href="#${entry.target.id}"]`
+                            );
 
-    `;
+                        if (active) {
+                            active.classList.add(
+                                "active"
+                            );
+                        }
+
+                    }
+                );
+
+            },
+            {
+                rootMargin:
+                    "-20% 0px -65% 0px"
+            }
+        );
+
+    sections.forEach(
+        section =>
+            observer.observe(section)
+    );
+
+    bookmarks[0]?.classList.add(
+        "active"
+    );
 
 }
 
@@ -584,11 +846,9 @@ function formatDate(value) {
     const date =
         new Date(value);
 
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
+    if (Number.isNaN(
+        date.getTime()
+    )) {
         return String(value);
     }
 
@@ -606,32 +866,18 @@ function formatDate(value) {
 function escapeHtml(value) {
 
     return String(value)
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
 }
 
-loadAnnouncement();
+loadAnnouncements();
 
 </script>
 
 </body>
 </html>
+```
