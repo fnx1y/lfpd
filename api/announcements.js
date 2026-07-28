@@ -1,8 +1,10 @@
-import { put, list } from "@vercel/blob";
+import { put, list, get } from "@vercel/blob";
 
 export default async function handler(req, res) {
     try {
+
         if (req.method === "POST") {
+
             const {
                 number,
                 title,
@@ -38,7 +40,8 @@ export default async function handler(req, res) {
             });
 
             const announcementNumber =
-                number && String(number).trim()
+                number &&
+                String(number).trim()
                     ? String(number).padStart(3, "0")
                     : String(existing.blobs.length + 1).padStart(3, "0");
 
@@ -48,21 +51,30 @@ export default async function handler(req, res) {
                 id,
                 number: announcementNumber,
                 title: title.trim(),
+
                 subtitle:
                     typeof subtitle === "string"
                         ? subtitle.trim()
                         : "",
+
                 sections:
                     Array.isArray(sections)
                         ? sections
-                            .filter(section =>
-                                typeof section === "string"
+                            .filter(
+                                section =>
+                                    typeof section === "string"
                             )
-                            .map(section => section.trim())
+                            .map(
+                                section =>
+                                    section.trim()
+                            )
                             .filter(Boolean)
                         : [],
+
                 content: content,
-                publishedAt: new Date().toISOString()
+
+                publishedAt:
+                    new Date().toISOString()
             };
 
             const pathname =
@@ -84,7 +96,9 @@ export default async function handler(req, res) {
             });
         }
 
+
         if (req.method === "GET") {
+
             const result = await list({
                 prefix: "announcements/"
             });
@@ -92,25 +106,83 @@ export default async function handler(req, res) {
             const announcements = [];
 
             for (const blob of result.blobs) {
-                try {
-                    const response = await fetch(blob.url);
 
-                    if (!response.ok) {
+                try {
+
+                    const result =
+                        await get(
+                            blob.pathname,
+                            {
+                                access: "private",
+                                useCache: false
+                            }
+                        );
+
+                    if (!result || !result.stream) {
                         continue;
                     }
 
-                    const announcement =
-                        await response.json();
+                    const reader =
+                        result.stream.getReader();
 
-                    announcements.push(announcement);
+                    const chunks = [];
+
+                    while (true) {
+
+                        const { value, done } =
+                            await reader.read();
+
+                        if (done) {
+                            break;
+                        }
+
+                        chunks.push(value);
+                    }
+
+                    const totalLength =
+                        chunks.reduce(
+                            (total, chunk) =>
+                                total + chunk.length,
+                            0
+                        );
+
+                    const combined =
+                        new Uint8Array(totalLength);
+
+                    let offset = 0;
+
+                    for (const chunk of chunks) {
+
+                        combined.set(
+                            chunk,
+                            offset
+                        );
+
+                        offset += chunk.length;
+                    }
+
+                    const text =
+                        new TextDecoder().decode(
+                            combined
+                        );
+
+                    const announcement =
+                        JSON.parse(text);
+
+                    announcements.push(
+                        announcement
+                    );
 
                 } catch (error) {
+
                     console.error(
                         "Could not read announcement:",
                         blob.pathname,
                         error
                     );
+
                 }
+
             }
 
             announcements.sort(
@@ -125,12 +197,14 @@ export default async function handler(req, res) {
             });
         }
 
+
         return res.status(405).json({
             success: false,
             error: "Method not allowed."
         });
 
     } catch (error) {
+
         console.error(
             "Announcement API error:",
             error
@@ -138,7 +212,9 @@ export default async function handler(req, res) {
 
         return res.status(500).json({
             success: false,
-            error: "An internal server error occurred."
+            error:
+                error?.message ||
+                "An internal server error occurred."
         });
     }
 }
