@@ -2,11 +2,8 @@ import { put, list, get } from "@vercel/blob";
 
 export default async function handler(req, res) {
     try {
-
         if (req.method === "POST") {
-
             const {
-                number,
                 title,
                 subtitle,
                 sections,
@@ -24,10 +21,36 @@ export default async function handler(req, res) {
                 });
             }
 
+            let announcementSections = [];
+
+            if (Array.isArray(sections)) {
+                announcementSections = sections
+                    .filter(section => section && typeof section === "object")
+                    .map(section => ({
+                        heading:
+                            typeof section.heading === "string"
+                                ? section.heading.trim()
+                                : "",
+                        label:
+                            typeof section.label === "string"
+                                ? section.label.trim()
+                                : "ANNOUNCEMENT",
+                        content:
+                            typeof section.content === "string"
+                                ? section.content
+                                : ""
+                    }))
+                    .filter(section =>
+                        section.heading ||
+                        section.content.trim()
+                    );
+            }
+
             if (
-                !content ||
-                typeof content !== "string" ||
-                !content.trim()
+                announcementSections.length === 0 &&
+                (!content ||
+                    typeof content !== "string" ||
+                    !content.trim())
             ) {
                 return res.status(400).json({
                     success: false,
@@ -39,66 +62,121 @@ export default async function handler(req, res) {
                 prefix: "announcements/"
             });
 
-            const announcementNumber =
-                number &&
-                String(number).trim()
-                    ? String(number).padStart(3, "0")
-                    : String(existing.blobs.length + 1).padStart(3, "0");
+            const currentCount = existing.blobs.length;
 
-            const id = crypto.randomUUID();
+            const createdAnnouncements = [];
 
-            const announcement = {
-                id,
-                number: announcementNumber,
-                title: title.trim(),
+            if (announcementSections.length > 0) {
+                for (
+                    let index = 0;
+                    index < announcementSections.length;
+                    index++
+                ) {
+                    const section =
+                        announcementSections[index];
 
-                subtitle:
-                    typeof subtitle === "string"
-                        ? subtitle.trim()
-                        : "",
+                    const id =
+                        crypto.randomUUID();
 
-                sections:
-                    Array.isArray(sections)
-                        ? sections
-                            .filter(
-                                section =>
-                                    typeof section === "string"
-                            )
-                            .map(
-                                section =>
-                                    section.trim()
-                            )
-                            .filter(Boolean)
-                        : [],
+                    const announcementNumber =
+                        String(
+                            currentCount + index + 1
+                        ).padStart(3, "0");
 
-                content: content,
+                    const announcement = {
+                        id,
+                        number: announcementNumber,
 
-                publishedAt:
-                    new Date().toISOString()
-            };
+                        title:
+                            section.heading ||
+                            title.trim(),
 
-            const pathname =
-                `announcements/${Date.now()}-${id}.json`;
+                        subtitle:
+                            typeof subtitle === "string"
+                                ? subtitle.trim()
+                                : "",
 
-            await put(
-                pathname,
-                JSON.stringify(announcement),
-                {
-                    access: "private",
-                    contentType: "application/json",
-                    addRandomSuffix: false
+                        label:
+                            section.label ||
+                            "ANNOUNCEMENT",
+
+                        content:
+                            section.content,
+
+                        publishedAt:
+                            new Date().toISOString()
+                    };
+
+                    const pathname =
+                        `announcements/${Date.now()}-${id}.json`;
+
+                    await put(
+                        pathname,
+                        JSON.stringify(announcement),
+                        {
+                            access: "private",
+                            contentType: "application/json",
+                            addRandomSuffix: false
+                        }
+                    );
+
+                    createdAnnouncements.push(
+                        announcement
+                    );
                 }
-            );
+            } else {
+                const id =
+                    crypto.randomUUID();
+
+                const announcementNumber =
+                    String(
+                        currentCount + 1
+                    ).padStart(3, "0");
+
+                const announcement = {
+                    id,
+                    number: announcementNumber,
+                    title: title.trim(),
+
+                    subtitle:
+                        typeof subtitle === "string"
+                            ? subtitle.trim()
+                            : "",
+
+                    label: "ANNOUNCEMENT",
+
+                    content: content,
+
+                    publishedAt:
+                        new Date().toISOString()
+                };
+
+                const pathname =
+                    `announcements/${Date.now()}-${id}.json`;
+
+                await put(
+                    pathname,
+                    JSON.stringify(announcement),
+                    {
+                        access: "private",
+                        contentType: "application/json",
+                        addRandomSuffix: false
+                    }
+                );
+
+                createdAnnouncements.push(
+                    announcement
+                );
+            }
 
             return res.status(201).json({
                 success: true,
-                announcement
+                announcements:
+                    createdAnnouncements
             });
         }
 
-
         if (req.method === "GET") {
-
             const result = await list({
                 prefix: "announcements/"
             });
@@ -106,10 +184,8 @@ export default async function handler(req, res) {
             const announcements = [];
 
             for (const blob of result.blobs) {
-
                 try {
-
-                    const result =
+                    const blobResult =
                         await get(
                             blob.pathname,
                             {
@@ -118,19 +194,23 @@ export default async function handler(req, res) {
                             }
                         );
 
-                    if (!result || !result.stream) {
+                    if (
+                        !blobResult ||
+                        !blobResult.stream
+                    ) {
                         continue;
                     }
 
                     const reader =
-                        result.stream.getReader();
+                        blobResult.stream.getReader();
 
                     const chunks = [];
 
                     while (true) {
-
-                        const { value, done } =
-                            await reader.read();
+                        const {
+                            value,
+                            done
+                        } = await reader.read();
 
                         if (done) {
                             break;
@@ -147,12 +227,13 @@ export default async function handler(req, res) {
                         );
 
                     const combined =
-                        new Uint8Array(totalLength);
+                        new Uint8Array(
+                            totalLength
+                        );
 
                     let offset = 0;
 
                     for (const chunk of chunks) {
-
                         combined.set(
                             chunk,
                             offset
@@ -172,17 +253,13 @@ export default async function handler(req, res) {
                     announcements.push(
                         announcement
                     );
-
                 } catch (error) {
-
                     console.error(
                         "Could not read announcement:",
                         blob.pathname,
                         error
                     );
-
                 }
-
             }
 
             announcements.sort(
@@ -197,14 +274,11 @@ export default async function handler(req, res) {
             });
         }
 
-
         return res.status(405).json({
             success: false,
             error: "Method not allowed."
         });
-
     } catch (error) {
-
         console.error(
             "Announcement API error:",
             error
